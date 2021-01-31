@@ -12,38 +12,36 @@ import javax.mail.internet.MimeMessage;
 
 public class EmailService {
 
-	public static void sendEmail() {
-		String host="mail.javatpoint.com";  
-		  final String user="sonoojaiswal@javatpoint.com";//change accordingly  
-		  final String password="xxxxx";//change accordingly  
-		    
-		  String to="sonoojaiswal1987@gmail.com";//change accordingly  
-		  
-		   //Get the session object  
-		   Properties props = new Properties();  
-		   props.put("mail.smtp.host",host);  
-		   props.put("mail.smtp.auth", "true");  
-		     
-		   Session session = Session.getDefaultInstance(props,  
-		    new javax.mail.Authenticator() {  
-		      protected PasswordAuthentication getPasswordAuthentication() {  
-		    return new PasswordAuthentication(user,password);  
-		      }  
-		    });  
-		  
-		   //Compose the message  
-		    try {  
-		     MimeMessage message = new MimeMessage(session);  
-		     message.setFrom(new InternetAddress(user));  
-		     message.addRecipient(Message.RecipientType.TO,new InternetAddress(to));  
-		     message.setSubject("javatpoint");  
-		     message.setText("This is simple program of sending email using JavaMail API");  
-		       
-		    //send the message  
-		     Transport.send(message);  
-		  
-		     System.out.println("message sent successfully...");  
-		   
-		     } catch (MessagingException e) {e.printStackTrace();}  
-		 }  
+	public void sendMessage(com.danielqueiroz.madqueenserver.model.Message messageForm) {
+		String to = "pubdaniel@gmail.com";
+		String user = "site@madqueenrock.com";
+		String password = "M@dqueen";
+		String host = "mail.madqueenrock.com";
+
+		Properties props = new Properties();
+        props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.host", host);
+		props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "587");
+
+		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(user, password);
+			}
+		});
+		
+		try {
+			MimeMessage message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(messageForm.getFrom()));
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+			message.setSubject(messageForm.getSubject());
+			message.setText(messageForm.getMessage());
+
+			Transport.send(message);
+
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+
+	}
 }

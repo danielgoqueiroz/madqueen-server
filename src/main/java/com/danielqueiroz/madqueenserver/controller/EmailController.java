@@ -2,17 +2,24 @@ package com.danielqueiroz.madqueenserver.controller;
 
 import javax.ws.rs.core.MediaType;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danielqueiroz.madqueenserver.model.Message;
 import com.danielqueiroz.madqueenserver.service.EmailService;
 
 @RestController
 public class EmailController {
 
-	@GetMapping(value = "/email", produces = MediaType.APPLICATION_JSON)
-	public String processEmail() {
-		return "Enviado";
+	@PostMapping(value = "/email", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
+	public ResponseEntity<?> processEmail(@RequestBody Message message) {
+		System.out.println(message);
+		EmailService mail = new EmailService();
+		mail.sendMessage(message);
+		return ResponseEntity.ok(HttpStatus.OK);
 	}
 	
 }
