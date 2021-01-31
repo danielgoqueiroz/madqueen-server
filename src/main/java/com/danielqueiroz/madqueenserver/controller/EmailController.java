@@ -12,7 +12,6 @@ public class EmailController {
 
 	@GetMapping(value = "/email", produces = MediaType.APPLICATION_JSON)
 	public String processEmail() {
-		EmailService.sendEmail();
 		return "Enviado";
 	}
 	
