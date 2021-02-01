@@ -16,7 +16,6 @@ public class EmailController {
 
 	@PostMapping(value = "/email", consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<?> processEmail(@RequestBody Message message) {
-		System.out.println(message);
 		EmailService mail = new EmailService();
 		mail.sendMessage(message);
 		return ResponseEntity.ok(HttpStatus.OK);
