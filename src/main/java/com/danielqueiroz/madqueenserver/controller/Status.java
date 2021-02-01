@@ -11,7 +11,7 @@ public class Status {
 
 	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<?> processEmail() {
-		return ResponseEntity.ok("Running");
+		return ResponseEntity.ok("On");
 	}
 	
 }
