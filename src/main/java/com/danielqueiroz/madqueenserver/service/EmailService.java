@@ -13,7 +13,7 @@ import javax.mail.internet.MimeMessage;
 public class EmailService {
 
 	public void sendMessage(com.danielqueiroz.madqueenserver.model.Message messageForm) {
-		String to = "pubdaniel@gmail.com";
+		String to = "contato@madqueenrock.com";
 		String user = "site@madqueenrock.com";
 		String password = "M@dqueen";
 		String host = "mail.madqueenrock.com";
