@@ -22,5 +22,4 @@ public class EmailController {
 		mail.sendMessage(message);
 		return ResponseEntity.ok(HttpStatus.OK);
 	}
-	
 }
