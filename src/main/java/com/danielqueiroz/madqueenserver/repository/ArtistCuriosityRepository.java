@@ -3,11 +3,9 @@ package com.danielqueiroz.madqueenserver.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.danielqueiroz.madqueenserver.model.Artist;
+import com.danielqueiroz.madqueenserver.model.ArtistCuriosity;
 
 @Repository
-public interface ArtistRepository extends JpaRepository<Artist, Long>{
-
-	Artist findByName(String name);
+public interface ArtistCuriosityRepository extends JpaRepository<ArtistCuriosity, Long>{
 	
 }

@@ -2,20 +2,17 @@ package com.danielqueiroz.madqueenserver.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.danielqueiroz.madqueenserver.model.Artist;
+import com.danielqueiroz.madqueenserver.model.ArtistCuriosity;
 
-//@Disabled
-@ExtendWith(SpringExtension.class)
-@DataJpaTest
+@SpringBootTest
 public class ArtistRepositoryTest {
 	
 	@Autowired
@@ -23,27 +20,39 @@ public class ArtistRepositoryTest {
 	
 	@Test
 	@Transactional
-	public void shouldSaveArtist() {
+	public void shouldGetArtistByNameWithoutCuriosity() {
 		
 		Artist artist = new Artist("Manu", "Cantora");
 		
-		Artist saved = repository.save(artist);
-		assertNotNull(saved);
-		assertNotNull(saved.getId());
+		Artist artistSaved = repository.save(artist);
+		assertNotNull(artistSaved);
+		assertNotNull(artistSaved.getId());
+		
+		assertTrue(artistSaved.getCuriosities().isEmpty());
+		
+		Artist artistFinded = repository.findByName("Manu");
+		assertNotNull(artistFinded);
+		assertNotNull(artistFinded.getName());
+		assertEquals(artist.getName(), artistFinded.getName());
 		
 	}
-
+	
 	@Test
 	@Transactional
-	public void shouldGetArtistByName() {
+	public void shouldGetArtistByNameWithCuriosity() {
 		
 		Artist artist = new Artist("Manu", "Cantora");
-
-		Artist saved = repository.save(artist);
-		assertNotNull(saved);
-		assertNotNull(saved.getId());
+		ArtistCuriosity curiosity = new ArtistCuriosity(artist, "Descrição da curiosidade");
+		artist.addCuriotity(curiosity);
 		
-		Artist artistFinded = repository.findByArtistName("Manu");
+		Artist artistSaved = repository.save(artist);
+		assertNotNull(artistSaved);
+		assertNotNull(artistSaved.getId());
+		
+		assertTrue(!artistSaved.getCuriosities().isEmpty());
+		
+		Artist artistFinded = repository.findByName("Manu");
+		assertNotNull(artistFinded.getId());
 		assertNotNull(artistFinded);
 		assertNotNull(artistFinded.getName());
 		assertEquals(artist.getName(), artistFinded.getName());

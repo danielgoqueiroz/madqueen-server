@@ -1,9 +1,14 @@
 package com.danielqueiroz.madqueenserver.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -16,6 +21,9 @@ public class Artist {
 	private String name;
 	private String description;
 	
+    @OneToMany(mappedBy = "artist", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	private List<ArtistCuriosity> curiosities;
+	
 	public Artist() {}
 	
 	
@@ -23,14 +31,12 @@ public class Artist {
 		this.name = name;
 		this.description = description;
 	}
-
 	
 	public Artist(Long id, String name, String description) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 	}
-
 
 	public Long getId() {
 		return id;
@@ -50,6 +56,20 @@ public class Artist {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public List<ArtistCuriosity> getCuriosities() {
+		if (this.curiosities == null) {
+			this.curiosities = new ArrayList<ArtistCuriosity>();
+		}
+		return curiosities;
+	}
+
+	public void setCuriosities(List<ArtistCuriosity> curiosities) {
+		this.curiosities = curiosities;
+	}
 	
+	public void addCuriotity(ArtistCuriosity curiosity) {
+		getCuriosities().add(curiosity);
+	}
 	
 }
