@@ -33,8 +33,11 @@ public class ArtistCuriosity {
 	}
 
 	public ArtistCuriosity(Artist artist, String description) {
-		super();
 		this.artist = artist;
+		this.description = description;
+	}
+
+	public ArtistCuriosity(String description) {
 		this.description = description;
 	}
 

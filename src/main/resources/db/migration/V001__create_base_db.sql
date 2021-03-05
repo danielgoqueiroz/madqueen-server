@@ -8,9 +8,14 @@ CREATE TABLE `artist` (
 	description varchar(1000)
 )
 
-select * from artist;
+CREATE TABLE `artistband` (
+	artist_id BIGINT NOT NULL,
+	band_id BIGINT NOT NULL,
+	FOREIGN KEY (artist_id) REFERENCES artist(id),
+	FOREIGN KEY (band_id) REFERENCES band(id),
+	PRIMARY KEY (artist_id, band_id)
 
-
+)
 
 CREATE TABLE `artistcuriosity` (
 	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,

@@ -1,5 +1,6 @@
 package com.danielqueiroz.madqueenserver.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import javax.transaction.Transactional;
@@ -17,9 +18,37 @@ public class ArtistCuriosityRepositoryTest {
 	@Autowired
 	private ArtistCuriosityRepository repository;
 	
+	@Autowired
+	private ArtistRepository artityRepository;
+	
 	@Test
 	@Transactional
-	public void shouldSaveCuriosity() {
+	public void shouldRemoveCuriosityWithArtistAndMantainArtist() {
+		
+	}
+	
+	@Test
+	@Transactional
+	public void shouldSaveCuriosityWithArtistAlreadSaved() {
+		
+		Artist artist = new Artist("Manu", "Cantora");
+		Artist artistSave = artityRepository.save(artist);
+		
+		ArtistCuriosity curiosity= new ArtistCuriosity(artistSave, "Descrição da curiosidade");
+		ArtistCuriosity curiositySaved= repository.save(curiosity);
+		
+		assertNotNull(curiositySaved.getId());
+		assertNotNull(curiositySaved.getDescription());
+		
+		Artist artistOnCuriositySaved = curiositySaved.getArtist();
+		assertNotNull(artistOnCuriositySaved);
+		assertEquals(artistSave.getId(), artistOnCuriositySaved.getId());
+		assertNotNull(artistOnCuriositySaved.getDescription());
+	} 
+	
+	@Test
+	@Transactional
+	public void shouldSaveCuriosityWithNewUser() {
 		
 		Artist artist = new Artist("Manu", "Cantora");
 		ArtistCuriosity curiosity= new ArtistCuriosity(artist, "Descrição da curiosidade");

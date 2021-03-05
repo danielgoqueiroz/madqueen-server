@@ -1,0 +1,146 @@
+package com.danielqueiroz.madqueenserver.model;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "user")
+public class User implements Serializable {
+	
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)
+    private String username;
+
+    @Column(unique = true)
+    private String email;
+
+    private String password;
+    
+    private String cpf;
+
+	@ManyToMany
+    @JoinTable(
+            name = "userrole",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> roles = new ArrayList<Role>();
+    
+    public User() {}
+    
+    public User(String name, String password, String email, String cpf, List<Role> roles) {
+    	this.email = email;
+    	this.username = name;
+    	this.password = password;
+    	this.cpf = cpf;
+    	this.roles = roles;
+    }
+
+	public Long getId() {
+        return id;
+    }
+
+    public void setId(final Long id) {
+        this.id = id;
+    }
+
+    public String getName() { 
+        return username;
+    }
+
+    public void setName(final String name) {
+        this.username = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(final String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(final String password) {
+        this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "User name " + username + ", email " + email;
+    }
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setAddRoleTypeUser() {
+		if (this.roles == null || this.roles.isEmpty()) {
+			this.roles = new ArrayList<Role>();
+		}
+		this.roles.add(new Role("USER"));
+		this.roles = getRoles();
+	}
+	
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	public void addDefaultRole() {
+		if (this.getRoles() == null || this.getRoles().isEmpty()) {
+			this.roles = new ArrayList<Role>();
+		}
+		Role rl = new Role("USER");
+		this.getRoles().add(rl);
+	}
+	
+	 public String getCpf() {
+			return cpf;
+		}
+
+		public void setCpf(String cpf) {
+			this.cpf = cpf;
+		}
+
+    
+}
