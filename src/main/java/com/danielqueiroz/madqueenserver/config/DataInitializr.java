@@ -10,7 +10,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.danielqueiroz.madqueenserver.constants.Config;
+import com.danielqueiroz.madqueenserver.constants.RoleCons;
 import com.danielqueiroz.madqueenserver.model.Role;
 import com.danielqueiroz.madqueenserver.model.User;
 import com.danielqueiroz.madqueenserver.repository.RoleRepository;
@@ -34,8 +34,8 @@ public class DataInitializr implements ApplicationListener<ContextRefreshedEvent
 		
 		List<Role> roles = roleRepository.findAll();
 		if (roles.isEmpty()) {
-			Role admin = new Role(Config.ADMIN);
-			Role user = new Role(Config.USER);
+			Role admin = new Role(RoleCons.ADMIN);
+			Role user = new Role(RoleCons.USER);
 			roleRepository.save(user);
 			roleRepository.save(admin);
 		}

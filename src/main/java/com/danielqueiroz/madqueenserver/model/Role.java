@@ -13,6 +13,9 @@ import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import com.danielqueiroz.madqueenserver.constants.RoleCons;
+import com.danielqueiroz.madqueenserver.constants.UserCons;
+
 @Entity
 @Table(name = "role")
 public class Role implements GrantedAuthority, Serializable {
@@ -31,6 +34,14 @@ public class Role implements GrantedAuthority, Serializable {
 	
 	public Role() {
 		super();
+	}
+	
+	public Role user() {
+		return new Role(RoleCons.USER);
+	}
+	
+	public Role admin() {
+		return new Role(RoleCons.ADMIN);
 	}
 
 	public Role(String name) {

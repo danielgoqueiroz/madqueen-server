@@ -1,5 +1,7 @@
 package com.danielqueiroz.madqueenserver.config;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,7 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -26,9 +28,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	public SecurityConfig(final HandlerExceptionResolver handlerExceptionResolver) {
-		this.handlerExceptionResolver = handlerExceptionResolver;
+		this.setHandlerExceptionResolver(handlerExceptionResolver);
 	}
 	
+//	@Autowired
+//	  public void initialize(AuthenticationManagerBuilder builder, DataSource dataSource) throws Exception {
+//	    builder.jdbcAuthentication().dataSource(dataSource);
+//	  }
+//	
 	@Bean
     public UserDetailsService userDetailsService() {
         return new UserDetailsServiceImpl();
@@ -50,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
+		return new BCryptPasswordEncoder();
 	}
 
 	@Override
@@ -58,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.inMemoryAuthentication().withUser("teste").password(passwordEncoder().encode("123")).roles("USER");
         auth.authenticationProvider(authenticationProvider());
     }
-
+	
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.httpBasic()
@@ -81,6 +88,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //				.exceptionHandling()
 //				.authenticationEntryPoint((request, response, exception) -> this.handlerExceptionResolver
 //						.resolveException(request, response, null, exception));
+	}
+
+	public HandlerExceptionResolver getHandlerExceptionResolver() {
+		return handlerExceptionResolver;
+	}
+
+	public void setHandlerExceptionResolver(HandlerExceptionResolver handlerExceptionResolver) {
+		this.handlerExceptionResolver = handlerExceptionResolver;
 	}
 
 }

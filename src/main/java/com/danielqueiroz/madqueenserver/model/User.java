@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,96 +19,110 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
-	
-    /**
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(unique = true)
-    private String username;
+	@Column(unique = true)
+	private String username;
 
-    @Column(unique = true)
-    private String email;
+	@Column(unique = true)
+	private String email;
 
-    private String password;
-    
-    private String cpf;
+	private String password;
 
-	@ManyToMany
-    @JoinTable(
-            name = "userrole",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles = new ArrayList<Role>();
-    
-    public User() {}
-    
-    public User(String name, String password, String email, String cpf, List<Role> roles) {
-    	this.email = email;
-    	this.username = name;
-    	this.password = password;
-    	this.cpf = cpf;
-    	this.roles = roles;
-    }
+	private String cpf;
+
+	@ManyToMany(cascade = { CascadeType.ALL })
+	@JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private List<Role> roles = new ArrayList<Role>();
+
+	public User() {
+	}
+
+	public User(String name, String password, String email, String cpf, List<Role> roles) {
+		this.email = email;
+		this.username = name;
+		this.password = password;
+		this.cpf = cpf;
+		this.roles = roles;
+	}
+
+	public User(String name, String password, String email, String cpf, Role role) {
+		this.email = email;
+		this.username = name;
+		this.password = password;
+		this.cpf = cpf;
+		addRole(role);
+	}
+
+	private void addRole(Role role) {
+		if (this.roles == null) {
+			this.roles = new ArrayList<>();
+		}
+		this.roles.add(role);
+
+	}
 
 	public Long getId() {
-        return id;
-    }
+		return id;
+	}
 
-    public void setId(final Long id) {
-        this.id = id;
-    }
+	public void setId(final Long id) {
+		this.id = id;
+	}
 
-    public String getName() { 
-        return username;
-    }
+	public String getName() {
+		return username;
+	}
 
-    public void setName(final String name) {
-        this.username = name;
-    }
+	public void setName(final String name) {
+		this.username = name;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setEmail(final String email) {
-        this.email = email;
-    }
+	public void setEmail(final String email) {
+		this.email = email;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setPassword(final String password) {
-        this.password = password;
-    }
+	public void setPassword(final String password) {
+		this.password = password;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        User user = (User) o;
-        return Objects.equals(id, user.id);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		User user = (User) o;
+		return Objects.equals(id, user.id);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 
-    @Override
-    public String toString() {
-        return "User name " + username + ", email " + email;
-    }
+	@Override
+	public String toString() {
+		return "User name " + username + ", email " + email;
+	}
 
 	public List<Role> getRoles() {
 		return roles;
@@ -121,7 +135,7 @@ public class User implements Serializable {
 		this.roles.add(new Role("USER"));
 		this.roles = getRoles();
 	}
-	
+
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
@@ -133,14 +147,13 @@ public class User implements Serializable {
 		Role rl = new Role("USER");
 		this.getRoles().add(rl);
 	}
-	
-	 public String getCpf() {
-			return cpf;
-		}
 
-		public void setCpf(String cpf) {
-			this.cpf = cpf;
-		}
+	public String getCpf() {
+		return cpf;
+	}
 
-    
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
 }
