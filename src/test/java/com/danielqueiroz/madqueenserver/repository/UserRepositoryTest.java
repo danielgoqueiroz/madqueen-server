@@ -16,26 +16,21 @@ import com.danielqueiroz.madqueenserver.model.User;
 public class UserRepositoryTest {
 
 	@Autowired
-	UserRespository repository;
-	
-	@Autowired
-	RoleRepository roleRepository;
+	UserRespository userRepository;
 	
 	@Test
 	@Transactional
 	public void shouldSaveUser() {
 		
-		Role role = new Role().user();
-		Role findByDescription = roleRepository.findByDescription(role.getDescription());
-		User user = new User("manu", "manu123", "manu@email.com", "0654321654", findByDescription);
+		User user = new User("manu", "manu123", "manu@email.com", "0654321654", new Role().user());
 		
-		User saved = repository.save(user);
+		User saved = userRepository.save(user);
 		
 		assertNotNull(saved.getId());
-		assertNotNull(saved.getName());
+		assertNotNull(saved.getUsername());
 		assertNotNull(saved.getCpf());
 		assertNotNull(saved.getPassword());
-		assertNotNull(saved.getName());
+		assertNotNull(saved.getUsername());
 		assertTrue(!saved.getRoles().isEmpty());
 		assertNotNull(saved.getRoles().get(0).getId());
 	}

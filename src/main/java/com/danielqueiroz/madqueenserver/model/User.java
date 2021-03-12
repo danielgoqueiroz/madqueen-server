@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,10 +16,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.danielqueiroz.madqueenserver.constants.RoleCons;
+
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
-
 	/**
 	 * 
 	 */
@@ -38,12 +39,19 @@ public class User implements Serializable {
 	private String password;
 
 	private String cpf;
-
-	@ManyToMany(cascade = { CascadeType.ALL })
+	
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private List<Role> roles = new ArrayList<Role>();
 
 	public User() {
+	}
+	
+	public User(User user) {
+		super();
+		this.username  =user.getUsername();
+		this.password = user.getPassword();
+		this.roles = user.getRoles();
 	}
 
 	public User(String name, String password, String email, String cpf, List<Role> roles) {
@@ -61,6 +69,18 @@ public class User implements Serializable {
 		this.cpf = cpf;
 		addRole(role);
 	}
+	
+	public User(String name, String password, Role role) {
+		this.username = name;
+		this.password = password;
+		addRole(role);
+	}
+	
+	public User(String name, String password) {
+		this.username = name;
+		this.password = password;
+		addRole(new Role(RoleCons.USER));
+	}
 
 	private void addRole(Role role) {
 		if (this.roles == null) {
@@ -77,12 +97,8 @@ public class User implements Serializable {
 	public void setId(final Long id) {
 		this.id = id;
 	}
-
-	public String getName() {
-		return username;
-	}
-
-	public void setName(final String name) {
+	
+	public void setUsername(final String name) {
 		this.username = name;
 	}
 
@@ -92,10 +108,6 @@ public class User implements Serializable {
 
 	public void setEmail(final String email) {
 		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
 	}
 
 	public void setPassword(final String password) {
@@ -112,16 +124,6 @@ public class User implements Serializable {
 		}
 		User user = (User) o;
 		return Objects.equals(id, user.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public String toString() {
-		return "User name " + username + ", email " + email;
 	}
 
 	public List<Role> getRoles() {
@@ -154,6 +156,14 @@ public class User implements Serializable {
 
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public String getPassword() {
+		return password;
 	}
 
 }

@@ -8,10 +8,10 @@ import com.danielqueiroz.madqueenserver.model.User;
 @Repository
 public interface UserRespository extends JpaRepository<User, Long> {
 	
-	User findByUsernameAndPassword(String name, String password);
-
+	User findByUsernameAndPassword(String usernmae, String password);
+	
 	User findByEmail(String email);
 	
 	User findByUsername(String username);
-
+	
 }

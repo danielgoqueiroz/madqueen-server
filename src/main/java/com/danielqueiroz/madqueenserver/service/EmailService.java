@@ -10,9 +10,13 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class EmailService {
 
 	public void sendMessage(com.danielqueiroz.madqueenserver.model.Message messageForm) {
+		
 		String to = "contato@madqueenrock.com";
 		String user = "site@madqueenrock.com";
 		String password = "M@dqueen";
