@@ -15,7 +15,7 @@ import com.danielqueiroz.madqueenserver.utils.Validation;
 
 @Service
 public class UserService {
-
+	
 	@Autowired
 	private UserRespository userRespository;
 
