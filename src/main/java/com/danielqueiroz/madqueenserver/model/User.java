@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.danielqueiroz.madqueenserver.constants.RoleCons;
 
@@ -128,6 +132,11 @@ public class User implements Serializable {
 
 	public List<Role> getRoles() {
 		return roles;
+	}
+	
+	public List<SimpleGrantedAuthority> getAuthorities() {
+		List<SimpleGrantedAuthority> authorities = getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getDescription())).collect(Collectors.toList());
+		return authorities;
 	}
 
 	public void setAddRoleTypeUser() {

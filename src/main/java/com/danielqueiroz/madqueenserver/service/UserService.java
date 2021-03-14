@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.danielqueiroz.madqueenserver.constants.UserCons;
@@ -18,9 +17,6 @@ public class UserService {
 	
 	@Autowired
 	private UserRespository userRespository;
-
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
 
 	public User findById(Long id) {
 		return userRespository.findById(id).get();
@@ -69,7 +65,6 @@ public class UserService {
 		return userRespository.findByUsernameAndPassword(user.getUsername(), user.getPassword()) != null;
 	}
 
-//	@Bean
 //	public PasswordEncoder getPasswordEncoder() {
 //		return passwordEncoder;
 //	}
