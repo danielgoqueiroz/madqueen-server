@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class ApplicationUserDetails implements UserDetails {
+public class ApplicationUser implements UserDetails {
 
 	/**
 	 * 
@@ -22,7 +22,7 @@ public class ApplicationUserDetails implements UserDetails {
 	private final boolean isEnabled;
 	
 	
-	public ApplicationUserDetails(List<? extends GrantedAuthority> grantedAuthorities, String password, String username,
+	public ApplicationUser(List<? extends GrantedAuthority> grantedAuthorities, String password, String username,
 			boolean isAccountNonExpired, boolean isAccountNonLocked, boolean isCredentialsNonExpired,
 			boolean isEnabled) {
 		super();
