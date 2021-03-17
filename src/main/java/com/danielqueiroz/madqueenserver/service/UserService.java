@@ -2,13 +2,16 @@ package com.danielqueiroz.madqueenserver.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.danielqueiroz.madqueenserver.constants.UserCons;
 import com.danielqueiroz.madqueenserver.model.Role;
 import com.danielqueiroz.madqueenserver.model.User;
+import com.danielqueiroz.madqueenserver.repository.RoleRepository;
 import com.danielqueiroz.madqueenserver.repository.UserRespository;
 import com.danielqueiroz.madqueenserver.utils.Validation;
 
@@ -17,6 +20,12 @@ public class UserService {
 	
 	@Autowired
 	private UserRespository userRespository;
+	
+	@Autowired
+	private RoleRepository roleRespository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public User findById(Long id) {
 		return userRespository.findById(id).get();
@@ -43,9 +52,9 @@ public class UserService {
 			if (user.getRoles().isEmpty()) {
 				user.addDefaultRole();
 			}
-			List<Role> rolesUpdated = new ArrayList<Role>();
-			user.setRoles(rolesUpdated);
-			user.setPassword(user.getPassword());
+			List<Role> dbRoles = user.getRoles().stream().map(role -> roleRespository.findByDescription(role.getDescription())).collect(Collectors.toList());
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			user.setRoles(dbRoles);
 			return userRespository.save(user);
 		}
 		return null;

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -44,8 +45,9 @@ public class User implements Serializable {
 
 	private String cpf;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	
 	private List<Role> roles = new ArrayList<Role>();
 
 	public User() {
@@ -72,6 +74,14 @@ public class User implements Serializable {
 		this.password = password;
 		this.cpf = cpf;
 		addRole(role);
+	}
+	
+	public User(String name, String password, String email, String cpf) {
+		this.email = email;
+		this.username = name;
+		this.password = password;
+		this.cpf = cpf;
+		addRole(new Role(RoleCons.USER));
 	}
 	
 	public User(String name, String password, Role role) {

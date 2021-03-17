@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.danielqueiroz.madqueenserver.model.User;
 import com.danielqueiroz.madqueenserver.repository.UserRespository;
 
-@Repository("mysql")
+@Repository
 public class ApplicationUserDaoImpl implements ApplicationUserDao {
 
 	@Autowired
