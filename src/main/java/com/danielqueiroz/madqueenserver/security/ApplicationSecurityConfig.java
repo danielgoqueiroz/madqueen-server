@@ -23,7 +23,6 @@ import com.danielqueiroz.madqueenserver.auth.ApplicationUserService;
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	private final PasswordEncoder passwordEncoder;
-	
 	private final ApplicationUserService applicationUserService;
 	
 	@Autowired
