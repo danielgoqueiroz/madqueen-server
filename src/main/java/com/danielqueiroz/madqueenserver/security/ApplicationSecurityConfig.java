@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import com.danielqueiroz.madqueenserver.auth.ApplicationUserService;
+import com.danielqueiroz.madqueenserver.jwt.JwtTokenVerifier;
+import com.danielqueiroz.madqueenserver.jwt.JwtUsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -34,28 +37,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http ) throws Exception {
 		http
 			.csrf().disable()
-			.authorizeRequests()
-			.antMatchers("/status*", "/email*", "/user*")
-			.permitAll()
-			.anyRequest()
-			.authenticated()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
-			.formLogin();
+				.addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager()))
+				.addFilterAfter(new JwtTokenVerifier(), JwtUsernamePasswordAuthenticationFilter.class)
+				.authorizeRequests()
+				.antMatchers("/status*", "/email*", "/user*", "/login*", "/api/login*")
+				.permitAll()
+				.anyRequest()
+				.authenticated();
 	}
 	
-	
-	@Bean
-	@Override
-	protected UserDetailsService userDetailsService() {
-		UserDetails user = User.builder()
-			.username("teste")
-			.password(passwordEncoder.encode("senha"))
-			.roles("USER").build();
-		
-		return new InMemoryUserDetailsManager(
-				user
-				);
-	}
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception{

@@ -2,5 +2,12 @@
 
 Api de serviço para site da banda Mad Queen
 
+##/email
+Serviço que envia e-mail para e-mail da banda
 
-Token https://medium.com/rapaduratech/criando-um-token-jwt-para-autentica%C3%A7%C3%A3o-em-spring-boot-371ccb54a093
+## /status
+Serviço que inicia job no heroku quando o site é acessado.
+
+
+Spring security
+https://www.youtube.com/watch?v=her_7pa0vrg&t=6624s
