@@ -3,6 +3,7 @@ package com.danielqueiroz.madqueenserver.jwt;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.crypto.SecretKey;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,14 +19,22 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 
 public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 
 	private final AuthenticationManager authenticationManager;
+	private final JwtConfig jwtConfig;
+	private final SecretKey secretKey;
 	
-	public JwtUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
+	@Autowired
+	public JwtUsernamePasswordAuthenticationFilter(
+			AuthenticationManager authenticationManager, 
+			JwtConfig jwtConfig,
+			SecretKey secretKey) {
+		
 		this.authenticationManager = authenticationManager;
+		this.jwtConfig = jwtConfig;
+		this.secretKey = secretKey;
 	}
 	
 	@Override
@@ -54,17 +63,16 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
 			Authentication authResult) throws IOException, ServletException {
 		
 		Date now = new Date();
-		String key = "McQfTjWnZr4u7w!z%C*F-JaNdRgUkXp2s5v8y/A?D(G+KbPeShVmYq3t6w9z$C&E";
 		
 		String token = Jwts.builder()
 			.setSubject(authResult.getName())
 			.claim("authorities", authResult.getAuthorities())
 			.setIssuedAt(now)
 			.setExpiration(new Date(now.getTime() + 60000 * 6))
-			.signWith(Keys.hmacShaKeyFor(key.getBytes()))
+			.signWith(secretKey)
 			.compact();
 		
-		response.addHeader("Authorization", "Bearer " + token);
+		response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix() + token);
 		
 	}
 }

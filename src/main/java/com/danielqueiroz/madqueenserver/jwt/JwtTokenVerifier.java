@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.crypto.SecretKey;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,28 +24,36 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 
 public class JwtTokenVerifier extends OncePerRequestFilter {
 
+	private final JwtConfig jwtConfig;
+	private final SecretKey secretKey;
+	
+	@Autowired
+	public JwtTokenVerifier(JwtConfig jwtConfig, SecretKey secretKey) {
+		this.jwtConfig = jwtConfig;
+		this.secretKey = secretKey;
+	}
+	
 	@Override
 	protected void doFilterInternal(
 			HttpServletRequest request, 
 			HttpServletResponse response, 
 			FilterChain filterChain) throws ServletException, IOException {
 		
-		String authorizationHeader = request.getHeader("Authorization");
+		String authorizationHeader = request.getHeader(jwtConfig.getAuthorizationHeader());
 		
-		if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
+		if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith(jwtConfig.getTokenPrefix())) {
 			filterChain.doFilter(request, response);
 			return;
 		}
 		
-		String token = authorizationHeader.replace("Bearer ", "");
+		String token = authorizationHeader.replace(jwtConfig.getTokenPrefix(), "");
 
 		try {
 			Jws<Claims> claimsJws = Jwts.parser()
-				.setSigningKey(Keys.hmacShaKeyFor("McQfTjWnZr4u7w!z%C*F-JaNdRgUkXp2s5v8y/A?D(G+KbPeShVmYq3t6w9z$C&E".getBytes()))
+				.setSigningKey(secretKey)
 				.parseClaimsJws(token);
 			Claims body = claimsJws.getBody();
 			
