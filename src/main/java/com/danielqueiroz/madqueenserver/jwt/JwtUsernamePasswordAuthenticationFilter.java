@@ -1,6 +1,7 @@
 package com.danielqueiroz.madqueenserver.jwt;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
@@ -68,7 +69,7 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
 			.setSubject(authResult.getName())
 			.claim("authorities", authResult.getAuthorities())
 			.setIssuedAt(now)
-			.setExpiration(new Date(now.getTime() + 60000 * 6))
+			.setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getTokenExpirationAfterDays())))
 			.signWith(secretKey)
 			.compact();
 		
