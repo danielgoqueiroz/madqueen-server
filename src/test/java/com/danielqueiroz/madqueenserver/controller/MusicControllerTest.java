@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -49,7 +48,6 @@ public class MusicControllerTest extends BaseControllerTest{
 	public void shouldNotSaveMusicWithoutArtist() throws URISyntaxException {
 		
 		String token = getToken("usuarioteste", "senhateste");
-		
 		
 		Music music = new Music("Música teste", 2020, null, new Band("Banda Test", "Descrição Banda Teste"));
 

@@ -21,9 +21,12 @@ import javax.persistence.Table;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.danielqueiroz.madqueenserver.constants.RoleCons;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "user")
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class User implements Serializable {
 	/**
 	 * 

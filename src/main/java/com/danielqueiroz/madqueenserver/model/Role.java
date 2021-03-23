@@ -10,9 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.danielqueiroz.madqueenserver.constants.RoleCons;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "role")
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class Role implements Serializable {
 
 	/**
