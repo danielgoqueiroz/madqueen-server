@@ -1,5 +1,7 @@
 package com.danielqueiroz.madqueenserver.repository;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
@@ -18,12 +20,27 @@ public class MusicRepositoryTest {
 	
 	@Test
 	@Transactional
-	public void shouldSaveBand() {
+	public void shouldSaveMusicWith() {
 		Band band = new Band("Banda", "Descrição");
 		Artist artist = new Artist("Manu", "Descrição");
-		Music music = new Music("Título", 2020, "Olá Olá Olá", "Hello hello hello", "http://www.youtube.com/video","http://www.linkimagem.com/imagem.jpg", artist, band);
 		
-		repository.save(music);
+		Music music = new Music(
+				"Título", 
+				2020, 
+				"Olá Olá Olá", 
+				"Hello hello hello", 
+				"http://www.youtube.com/video",
+				"http://www.linkimagem.com/imagem.jpg", 
+				artist, 
+				band);
+		
+		Music save = repository.save(music);
+		
+		assertNotNull(save);
+		assertNotNull(save.getId());
+		assertNotNull(save.getArtist().getId());
+		assertNotNull(save.getBand().getId());
+		
 	} 
 
 }

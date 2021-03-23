@@ -43,11 +43,6 @@ public class Role implements Serializable {
 		this.description = name;
 	}
 
-//	@Override
-//	public String getAuthority() {
-//		return this.description;
-//	}
-
 	public Long getId() {
 		return Id;
 	}

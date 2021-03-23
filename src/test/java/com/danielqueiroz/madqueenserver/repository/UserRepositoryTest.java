@@ -18,13 +18,19 @@ public class UserRepositoryTest {
 	@Autowired
 	UserRespository userRepository;
 	
+	@Autowired
+	RoleRepository roleRepository;
+	
 	@Test
 	@Transactional
 	public void shouldSaveUser() {
 		
-		User user = new User("manu", "manu123", "manu@email.com", "0654321654", new Role().user());
+		Role findByDescription = roleRepository.findByDescription("ROLE_USER");
 		
-		User saved = userRepository.save(user);
+		User user = new User("manu", "manu123", "manu@email.com", "0654321654", findByDescription);
+		
+		userRepository.save(user);
+		User saved = userRepository.findByUsername(user.getUsername());
 		
 		assertNotNull(saved.getId());
 		assertNotNull(saved.getUsername());

@@ -1,5 +1,6 @@
 package com.danielqueiroz.madqueenserver.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -32,7 +33,6 @@ public class Band {
 	private List<Artist> artists;
 
 	public Band() {
-		super();
 	}
 
 	public Band(Long id, String name, String description, int created, List<Music> musics, List<Artist> artists) {
@@ -84,6 +84,9 @@ public class Band {
 	}
 
 	public List<Music> getMusics() {
+		if (this.musics == null) {
+			musics = new ArrayList<>();
+		}
 		return musics;
 	}
 
@@ -92,6 +95,9 @@ public class Band {
 	}
 
 	public List<Artist> getArtists() {
+		if (this.artists== null) {
+			artists = new ArrayList<>();
+		}
 		return artists;
 	}
 

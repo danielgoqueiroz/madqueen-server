@@ -1,6 +1,5 @@
 package com.danielqueiroz.madqueenserver.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,7 +62,6 @@ public class UserService {
 	public boolean isUserAndPasswordValid(User user) {
 		User userFinded = userRespository.findByUsername(user.getUsername());
 		if (userFinded != null) {
-//			return passwordEncoder.matches(passwordEncoder.encode(user.getPassword()), userFinded.getPassword());
 			return true;
 		}
 		return false;
@@ -73,10 +71,5 @@ public class UserService {
 	private boolean isUserExist(User user) {
 		return userRespository.findByUsernameAndPassword(user.getUsername(), user.getPassword()) != null;
 	}
-
-//	public PasswordEncoder getPasswordEncoder() {
-//		return passwordEncoder;
-//	}
-
 
 }

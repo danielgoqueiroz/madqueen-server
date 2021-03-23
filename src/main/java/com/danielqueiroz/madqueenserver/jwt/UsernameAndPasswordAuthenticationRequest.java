@@ -9,6 +9,12 @@ public class UsernameAndPasswordAuthenticationRequest {
 		super();
 	}
 
+	public UsernameAndPasswordAuthenticationRequest(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+	}
+
 	public String getUsername() {
 		return username;
 	}

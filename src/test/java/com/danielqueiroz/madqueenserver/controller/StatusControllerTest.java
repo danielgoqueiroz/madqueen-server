@@ -12,19 +12,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class StatusControllerTest {
+public class StatusControllerTest extends BaseControllerTest{
 
-	@LocalServerPort
-	private int port;
-	
-	@Autowired
-	private TestRestTemplate restTemplate;
-	
 	@Test
 	public void shouldRequestStatusWithOk() {
-		ResponseEntity<String> exchange = this.restTemplate.exchange("http://localhost:" + port + "/api/", HttpMethod.GET, null, String.class);
+		ResponseEntity<String> exchange = getRestTemplate().exchange("http://localhost:" + getPort() + "/api/status", HttpMethod.GET, null, String.class);
 		assertEquals(HttpStatus.OK, exchange.getStatusCode());
+		assertEquals("On", exchange.getBody());
 	}
-	
 }

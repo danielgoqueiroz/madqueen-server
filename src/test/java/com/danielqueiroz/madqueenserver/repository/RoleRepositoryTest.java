@@ -16,6 +16,7 @@ public class RoleRepositoryTest {
 	
 	@Autowired
 	RoleRepository repository;
+	
 	@Test
 	@Transactional
 	public void findRole() {

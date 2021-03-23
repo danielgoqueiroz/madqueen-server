@@ -3,6 +3,7 @@ package com.danielqueiroz.madqueenserver.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.danielqueiroz.madqueenserver.model.User;
 import com.danielqueiroz.madqueenserver.model.UserDTO;
 import com.danielqueiroz.madqueenserver.service.UserService;
+import com.google.common.net.MediaType;
 
 @RestController
 @RequestMapping("/user")
@@ -21,18 +23,20 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<?>getUser(@PathVariable String id) {
-		return ResponseEntity.ok(id);
+	@GetMapping(path = "/teste", produces = javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	public ResponseEntity<String> test() {
+		String teste = "teste";
+		
+		return ResponseEntity.ok(teste);
 	}
-	@PostMapping
-	public ResponseEntity<?>signUp(@RequestBody UserDTO user) {
-		User save = userService.save(new User(user.getUsername(), user.getPassword(), user.getEmail(), user.getCpf()));
-		if (save != null) {
-			return ResponseEntity.ok("Novo usuário salvo com sucesso");
-		} else {
-			return new ResponseEntity(new String("{ mensagem : Erro ao salvar usuário }"), HttpStatus.BAD_REQUEST);
-		}
+	
+	@GetMapping("/{username}")
+	public ResponseEntity<?>getUser(@PathVariable String username) {
+		User findByUsername = userService.findByUsername(username);
+		UserDTO user = new UserDTO();
+		user.setUsername(findByUsername.getUsername());
+		user.setEmail(findByUsername.getEmail());
+		return ResponseEntity.ok(user);
 	}
-
+	
 }
