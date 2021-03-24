@@ -22,10 +22,32 @@ import com.danielqueiroz.madqueenserver.model.Artist;
 import com.danielqueiroz.madqueenserver.model.Music;
 
 public class ArtistControllerTest extends BaseControllerTest {
-
+	
 	@Test
 	@Transactional
-	public void shouldgetArtist() throws URISyntaxException {
+	public void shouldSaveArtist() throws URISyntaxException {
+		String token = getToken("usuarioteste", "senhateste");
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", token);
+		
+		RequestEntity<Music> requestEntity = new RequestEntity<Music>(headers, HttpMethod.GET, new URI("http://localhost:" + getPort() + "/api/artist"));
+			
+		ResponseEntity<Artist[]> exchange = getRestTemplate().exchange(requestEntity, Artist[].class);
+
+		assertEquals(HttpStatus.OK, exchange.getStatusCode());
+		
+		List<Artist> artists = Arrays.asList(exchange.getBody());
+		
+		
+		assertNotNull(artists);
+		assertTrue(artists.size() > 0);
+		assertEquals(HttpStatus.OK, exchange.getStatusCode());
+	}
+	
+	@Test
+	@Transactional
+	public void shouldGetArtist() throws URISyntaxException {
 		String token = getToken("usuarioteste", "senhateste");
 		
 		HttpHeaders headers = new HttpHeaders();

@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 
+import com.danielqueiroz.madqueenserver.helper.TestHelper;
+import com.danielqueiroz.madqueenserver.model.Artist;
 import com.danielqueiroz.madqueenserver.model.Band;
 import com.danielqueiroz.madqueenserver.model.Music;
 
@@ -49,21 +51,38 @@ public class MusicControllerTest extends BaseControllerTest{
 		
 		String token = getToken("usuarioteste", "senhateste");
 		
-		Music music = new Music("Música teste", 2020, null, new Band("Banda Test", "Descrição Banda Teste"));
+		Music music = TestHelper.getMusic();
+		music.setArtist(null);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", token);
 		
-		RequestEntity<Music> requestEntity = new RequestEntity<Music>(music, HttpMethod.POST, new URI("http://localhost:" + getPort() + "/api/music"));
+		RequestEntity<Music> requestEntity = new RequestEntity<Music>(music, headers, HttpMethod.POST, new URI("http://localhost:" + getPort() + "/api/music"));
 			
 		ResponseEntity<String> exchange = getRestTemplate().exchange(requestEntity, String.class);
 
-		assertEquals(HttpStatus.OK, exchange.getStatusCode());
+		assertEquals(HttpStatus.BAD_REQUEST, exchange.getStatusCode());
 		
-		String body = exchange.getBody();
-		assertNotNull(body);
-		assertEquals(HttpStatus.OK, body);
+	}
+	
+	@Test
+	public void shouldNotSaveMusicWithoutBand() throws URISyntaxException {
+		
+		String token = getToken("usuarioteste", "senhateste");
+		
+		Music music = TestHelper.getMusic();
+		music.setBand(null);
 
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", token);
+		
+		RequestEntity<Music> requestEntity = new RequestEntity<Music>(music, headers, HttpMethod.POST, new URI("http://localhost:" + getPort() + "/api/music"));
+			
+		ResponseEntity<String> exchange = getRestTemplate().exchange(requestEntity, String.class);
+
+		assertEquals(HttpStatus.BAD_REQUEST, exchange.getStatusCode());
+		assertEquals("A música precisa ter um uma banda vinculada.", exchange.getBody());
+		
 	}
 	
 	
