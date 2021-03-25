@@ -2,6 +2,7 @@ package com.danielqueiroz.madqueenserver.controller;
 
 import java.util.List;
 
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danielqueiroz.madqueenserver.Exceptions.ValidationException;
 import com.danielqueiroz.madqueenserver.model.Music;
 import com.danielqueiroz.madqueenserver.service.MusicService;
+import com.google.common.base.Strings;
 
 @RestController
 @RequestMapping("/music")
@@ -24,8 +27,8 @@ public class MusicController {
 	private MusicService service;
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON)
-	public ResponseEntity<Object[]> getMusics() {
-		List<Music> musics = service.getMusics();
+	public ResponseEntity<Object[]> getMusics(@RequestParam String title) {
+		List<Music> musics = service.getMusics(title);
 		return ResponseEntity.ok(musics.toArray());
 	}
 	

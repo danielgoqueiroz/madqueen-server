@@ -1,5 +1,6 @@
 package com.danielqueiroz.madqueenserver.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.danielqueiroz.madqueenserver.Exceptions.ValidationException;
 import com.danielqueiroz.madqueenserver.model.Music;
 import com.danielqueiroz.madqueenserver.repository.MusicRepository;
+import com.google.common.base.Strings;
 
 @Service
 public class MusicService {
@@ -15,7 +17,12 @@ public class MusicService {
 	@Autowired
 	private MusicRepository repository;
 	
-	 public List<Music> getMusics() {
+	 public List<Music> getMusics(String title) {
+		 
+		 if (!Strings.isNullOrEmpty(title)) {
+			 return Arrays.asList(repository.findByTitle(title.trim()));
+		 }
+		 
 		 List<Music> findAll = repository.findAll();
 		 return findAll;
 	 }
