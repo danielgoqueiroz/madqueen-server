@@ -20,7 +20,8 @@ public class MusicService {
 	 public List<Music> getMusics(String title) {
 		 
 		 if (!Strings.isNullOrEmpty(title)) {
-			 return Arrays.asList(repository.findByTitle(title.trim()));
+			 List<Music> asList = Arrays.asList(repository.findMusicByTitle(title.trim()));
+			return asList;
 		 }
 		 
 		 List<Music> findAll = repository.findAll();

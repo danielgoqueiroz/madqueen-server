@@ -4,8 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,11 +40,11 @@ public class MusicControllerTest extends BaseControllerTest{
 		RequestEntity<Music> requestEntity = new RequestEntity<Music>(headers, HttpMethod.GET, new URI("http://localhost:" + getPort() + "/api/music"));
 			
 		ResponseEntity<Music[]> exchange = (ResponseEntity<Music[]>) getRestTemplate().exchange(requestEntity, Music[].class);
+		exchange.getBody();
 
 		assertEquals(HttpStatus.OK, exchange.getStatusCode());
 		
-		List<Music> musics = Arrays.asList(exchange.getBody());
-		
+		List<Object> musics = Arrays.asList(exchange.getBody());
 		
 		assertNotNull(musics);
 		assertTrue(musics.size() > 0);
@@ -50,7 +55,7 @@ public class MusicControllerTest extends BaseControllerTest{
 	
 	@Test
 	@Transactional
-	public void saveMusicAndGetMusicSaved() throws URISyntaxException {
+	public void saveMusicAndGetMusicSaved() throws URISyntaxException, MalformedURLException, UnsupportedEncodingException {
 		String token = getToken("usuarioteste", "senhateste");
 		
 		Music music = TestHelper.getMusic();
@@ -65,8 +70,8 @@ public class MusicControllerTest extends BaseControllerTest{
 		assertEquals(HttpStatus.OK, exchange.getStatusCode());
 		
 		//Get
-		
-		RequestEntity<Music> requestGetEntity = new RequestEntity<Music>(headers, HttpMethod.POST, new URI("http://localhost:" + getPort() + "/api/music?title=" + music.getTitle()));
+		String url = new String("http://localhost:" + getPort() + "/api/music?title="+  URLEncoder.encode(music.getTitle(), "UTF-8"));
+		RequestEntity<Music> requestGetEntity = new RequestEntity<Music>(headers, HttpMethod.GET,  new URI(url));
 			
 		ResponseEntity<Music[]> exchangeSearch = (ResponseEntity<Music[]>) getRestTemplate().exchange(requestGetEntity, Music[].class);
 
@@ -78,6 +83,36 @@ public class MusicControllerTest extends BaseControllerTest{
 		assertNotNull(musics);
 		assertTrue(musics.size() > 0);
 		assertEquals(HttpStatus.OK, exchange.getStatusCode());
+
+	}
+	
+	@Test
+	@Transactional
+	public void saveMusicAndNotGetMusicWithNotExist() throws URISyntaxException, MalformedURLException, UnsupportedEncodingException {
+		String token = getToken("usuarioteste", "senhateste");
+		
+		Music music = TestHelper.getMusic();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", token);
+		
+		RequestEntity<Music> requestEntity = new RequestEntity<Music>(music, headers, HttpMethod.POST, new URI("http://localhost:" + getPort() + "/api/music"));
+			
+		ResponseEntity<String> exchange = getRestTemplate().exchange(requestEntity, String.class);
+
+		assertEquals(HttpStatus.OK, exchange.getStatusCode());
+		
+		//Get
+		String url = new String("http://localhost:" + getPort() + "/api/music?title="+  URLEncoder.encode("Essa muisica não existe", "UTF-8"));
+		RequestEntity<Music> requestGetEntity = new RequestEntity<Music>(headers, HttpMethod.GET,  new URI(url));
+			
+		ResponseEntity<Music[]> exchangeSearch = (ResponseEntity<Music[]>) getRestTemplate().exchange(requestGetEntity, Music[].class);
+
+		assertEquals(HttpStatus.OK, exchangeSearch.getStatusCode());
+		
+		List<Music> musics = Arrays.asList(exchangeSearch.getBody());
+		
+		assertNotNull(musics.isEmpty());
 
 	}
 	

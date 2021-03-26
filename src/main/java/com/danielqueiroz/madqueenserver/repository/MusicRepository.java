@@ -8,6 +8,6 @@ import com.danielqueiroz.madqueenserver.model.Music;
 @Repository
 public interface  MusicRepository extends JpaRepository<Music, Long>{
 
-	Music findByTitle(String title);
+	Music findMusicByTitle(String title);
 
 }

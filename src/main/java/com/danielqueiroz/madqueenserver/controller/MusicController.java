@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danielqueiroz.madqueenserver.Exceptions.ValidationException;
@@ -27,7 +28,7 @@ public class MusicController {
 	private MusicService service;
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON)
-	public ResponseEntity<Object[]> getMusics(@RequestParam String title) {
+	public ResponseEntity<?> getMusics(@RequestParam(required = false, name="title") String title) {
 		List<Music> musics = service.getMusics(title);
 		return ResponseEntity.ok(musics.toArray());
 	}
