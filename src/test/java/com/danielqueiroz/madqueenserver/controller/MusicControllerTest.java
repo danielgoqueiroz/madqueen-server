@@ -55,6 +55,63 @@ public class MusicControllerTest extends BaseControllerTest{
 	
 	@Test
 	@Transactional
+	public void trySaveNewMusiThenAlreadyExistsEndReciveMessage() throws URISyntaxException, MalformedURLException, UnsupportedEncodingException {
+		
+		String token = getToken("usuarioteste", "senhateste");
+		Music music = TestHelper.getMusic();
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", token);
+		RequestEntity<Music> requestEntity = new RequestEntity<Music>(music, headers, HttpMethod.POST, new URI("http://localhost:" + getPort() + "/api/music"));
+		ResponseEntity<String> exchange = getRestTemplate().exchange(requestEntity, String.class);
+		assertEquals(HttpStatus.OK, exchange.getStatusCode());
+		
+		
+		ResponseEntity<String> newRequest = getRestTemplate().exchange(requestEntity, String.class);
+		assertEquals(HttpStatus.CONFLICT, newRequest.getStatusCode());
+
+	}
+	
+	@Test
+	@Transactional
+	public void updateMusic() throws URISyntaxException, MalformedURLException, UnsupportedEncodingException {
+		
+		String token = getToken("usuarioteste", "senhateste");
+		Music music = TestHelper.getMusic();
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", token);
+		
+		//Save
+		RequestEntity<Music> requestEntity = new RequestEntity<Music>(music, headers, HttpMethod.POST, new URI("http://localhost:" + getPort() + "/api/music"));
+		ResponseEntity<String> exchange = getRestTemplate().exchange(requestEntity, String.class);
+		assertEquals(HttpStatus.OK, exchange.getStatusCode());
+
+		//Get saved
+		String url = new String("http://localhost:" + getPort() + "/api/music?title="+  URLEncoder.encode(music.getTitle(), "UTF-8"));
+		RequestEntity<Music> requestGetEntity = new RequestEntity<Music>(headers, HttpMethod.GET,  new URI(url));
+			
+		ResponseEntity<Music[]> getResponse = (ResponseEntity<Music[]>) getRestTemplate().exchange(requestGetEntity, Music[].class);
+		Music[] musics = getResponse.getBody();
+		
+		assertEquals(1, musics.length );
+		
+		Music musicSaved = musics[0];
+		musicSaved.setYoutubeLink("http://diferentelink.com");
+		
+		//Update
+		RequestEntity<Music> updateEntity = new RequestEntity<Music>(musicSaved, headers, HttpMethod.PUT, new URI("http://localhost:" + getPort() + "/api/music"));
+		ResponseEntity<String> newRequest = getRestTemplate().exchange(updateEntity , String.class);
+		assertEquals(HttpStatus.CONFLICT, newRequest.getStatusCode());
+
+		
+		
+		RequestEntity<Music> getResponseUpdated = new RequestEntity<Music>(headers, HttpMethod.GET,  new URI(url));
+		Music musicUpdated = getResponseUpdated.getBody();
+		assertEquals(musicSaved.getYoutubeLink(), musicUpdated.getYoutubeLink());
+
+	}
+	
+	@Test
+	@Transactional
 	public void saveMusicAndGetMusicSaved() throws URISyntaxException, MalformedURLException, UnsupportedEncodingException {
 		String token = getToken("usuarioteste", "senhateste");
 		

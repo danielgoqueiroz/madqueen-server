@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.danielqueiroz.madqueenserver.Exceptions.ValidationException;
 import com.danielqueiroz.madqueenserver.model.Music;
@@ -18,9 +20,9 @@ public class MusicService {
 	private MusicRepository repository;
 	
 	 public List<Music> getMusics(String title) {
-		 
+
 		 if (!Strings.isNullOrEmpty(title)) {
-			 List<Music> asList = Arrays.asList(repository.findMusicByTitle(title.trim()));
+			 List<Music> asList = Arrays.asList(repository.findMusicByTitle(title));
 			return asList;
 		 }
 		 
@@ -29,7 +31,16 @@ public class MusicService {
 	 }
 
 	public void save(Music music) throws ValidationException {
+
 		validade(music);
+		
+		Music findMusicByTitle = repository.findMusicByTitle(music.getTitle());
+		
+		if (findMusicByTitle == null ) {
+			repository.save(music);
+		} else {
+			throw new ResponseStatusException(HttpStatus.CONFLICT);
+		}
 		
 	}
 
