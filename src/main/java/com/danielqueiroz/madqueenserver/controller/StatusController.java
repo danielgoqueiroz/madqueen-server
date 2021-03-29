@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/status")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class StatusController {
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON)
