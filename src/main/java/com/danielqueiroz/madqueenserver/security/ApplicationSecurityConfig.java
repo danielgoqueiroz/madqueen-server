@@ -27,57 +27,54 @@ import com.danielqueiroz.madqueenserver.jwt.JwtUsernamePasswordAuthenticationFil
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
+public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final PasswordEncoder passwordEncoder;
 	private final ApplicationUserService applicationUserService;
 	private final SecretKey secretKey;
 	private final JwtConfig jwtConfig;
-	
+
 	@Autowired
-	public ApplicationSecurityConfig (
-			PasswordEncoder passwordEncoder, 
-			ApplicationUserService applicationUserService,
-			SecretKey secretKey,
-			JwtConfig jwtConfig) {
-		
+	public ApplicationSecurityConfig(PasswordEncoder passwordEncoder, ApplicationUserService applicationUserService,
+			SecretKey secretKey, JwtConfig jwtConfig) {
+
 		this.passwordEncoder = passwordEncoder;
 		this.applicationUserService = applicationUserService;
 		this.secretKey = secretKey;
 		this.jwtConfig = jwtConfig;
 	}
+
 	@Override
-	protected void configure(HttpSecurity http ) throws Exception {
-		
-		http
-			.csrf().disable()
-				.cors().and()
-				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-				.addFilter(
-						new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
-				.addFilterAfter(
-						new JwtTokenVerifier(jwtConfig, secretKey), JwtUsernamePasswordAuthenticationFilter.class)
-				.authorizeRequests()
-				.antMatchers("/status*", "/email*", "/login*").permitAll()
-				.antMatchers("/user*", "/music*", "/artist*").hasAnyRole("USER")
-				.antMatchers("/admin*").hasAnyRole("ADMIN")
-				.anyRequest()
-				.authenticated();
+	protected void configure(HttpSecurity http) throws Exception {
+
+		http.csrf().disable().cors().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and()
+				.addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
+				.addFilterAfter(new JwtTokenVerifier(jwtConfig, secretKey),
+						JwtUsernamePasswordAuthenticationFilter.class)
+				.authorizeRequests().antMatchers("/status*", "/email*", "/login*").permitAll()
+				.antMatchers("/user*", "/music*", "/artist*").hasAnyRole("USER").antMatchers("/admin*")
+				.hasAnyRole("ADMIN").anyRequest().authenticated();
 	}
-	
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+		return source;
+	}
+
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(daoAuthenticationProvider());
 	}
-	
-	@Bean 
+
+	@Bean
 	public DaoAuthenticationProvider daoAuthenticationProvider() {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		provider.setPasswordEncoder(passwordEncoder);
 		provider.setUserDetailsService(applicationUserService);
 		return provider;
 	}
-	
+
 }
