@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin
 public class ApiController {
 	
 	@GetMapping
