@@ -49,7 +49,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.csrf().disable().cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+		CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
+		cors.addExposedHeader("Authorization");
+		http.csrf().disable().cors().configurationSource(request -> {
+			return cors;
+		})
 			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 				.addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
