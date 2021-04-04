@@ -41,7 +41,7 @@ public class BandController {
 		} catch (ValidationException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
-		return ResponseEntity.ok("Banda salva com sucesso.");
+		return ResponseEntity.ok(band);
 	}
 	
 }
