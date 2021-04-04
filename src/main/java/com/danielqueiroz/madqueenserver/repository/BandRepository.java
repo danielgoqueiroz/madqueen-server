@@ -6,4 +6,6 @@ import com.danielqueiroz.madqueenserver.model.Band;
 
 public interface BandRepository extends JpaRepository<Band, Long>{
 
+	Band findByName(String name);
+
 }
