@@ -1,0 +1,32 @@
+package com.danielqueiroz.madqueenserver.controller;
+
+import java.util.List;
+
+import javax.ws.rs.core.MediaType;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.danielqueiroz.madqueenserver.model.Band;
+import com.danielqueiroz.madqueenserver.service.BandService;
+
+@RestController
+@RequestMapping("/band")
+public class BandController {
+
+	@Autowired
+	private BandService service;
+	
+	@CrossOrigin	
+	@GetMapping(produces = MediaType.APPLICATION_JSON)
+	public ResponseEntity<?> getMusics(@RequestParam(required = false, name="title") String title) {
+		List<Band> bands = service.getBands();
+		return ResponseEntity.ok(bands.toArray());
+	}
+	
+}
