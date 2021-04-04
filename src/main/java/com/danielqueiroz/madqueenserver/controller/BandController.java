@@ -36,9 +36,8 @@ public class BandController {
 	@CrossOrigin	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON, produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<?> save(@RequestBody Band band) {
-		Band bandSaved;
 		try {
-			bandSaved = service.save(band);
+			service.save(band);
 		} catch (ValidationException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
