@@ -22,6 +22,9 @@ public class BandService {
 
 	public Band save(Band band) throws ValidationException {
 		validate(band);
+		if (band.getDescription() == null) {
+			band.setDescription(band.getName());
+		}
 		Band save = repository.save(band);
 		return save;
 	}
