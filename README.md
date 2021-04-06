@@ -11,3 +11,7 @@ Serviço que inicia job no heroku quando o site é acessado.
 
 Spring security
 https://www.youtube.com/watch?v=her_7pa0vrg&t=6624s
+
+## Api músicas
+https://developer.musixmatch.com/documentation/api-reference/album-get
+https://github.com/sachin-handiekar/jMusixMatch
