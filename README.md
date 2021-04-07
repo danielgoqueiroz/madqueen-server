@@ -16,4 +16,4 @@ https://www.youtube.com/watch?v=her_7pa0vrg&t=6624s
 https://api.vagalume.com.br/docs/search
 
 ## Créditos
-"Letras de Músicas por Vagalume
+Letras de Músicas por Vagalume

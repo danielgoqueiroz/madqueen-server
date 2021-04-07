@@ -11,6 +11,8 @@ import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.danielqueiroz.madqueenserver.api.model.MusicDTO;
+
 @SpringBootTest
 public class VagalumeAPITest {
 
@@ -19,16 +21,22 @@ public class VagalumeAPITest {
 	
 	@Test
 	public void shouldGetMusis() throws JSONException {
-		JSONArray musics = api.getMusics("vamos fugir");
+		List<MusicDTO> musics = api.getMusics("vamos fugir");
+		
 		assertNotNull(musics);
-		assertTrue(musics.length() > 0);
+		assertTrue(musics.size() > 0);
 	}
 	
 	@Test
 	public void shoulGetMudicByID() throws JSONException {
-		List<String> musics = api.getMusic("l3ade68b7g3be34ea3");
-		assertNotNull(musics);
-		assertTrue(musics.size() > 0);
+		MusicDTO musicDTO = api.getMusic("3ade68b7g3be34ea3");
+		assertNotNull(musicDTO);
+		assertNotNull(musicDTO.getId());
+		assertNotNull(musicDTO.getTitle());
+		assertNotNull(musicDTO.getBand());
+		
+		assertTrue(musicDTO.getLetters().size() == 1);
+		
 	}
 	
 }
