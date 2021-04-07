@@ -13,8 +13,7 @@ Spring security
 https://www.youtube.com/watch?v=her_7pa0vrg&t=6624s
 
 ## Api músicas
-https://developer.musixmatch.com/documentation/api-reference/album-get
-https://github.com/sachin-handiekar/jMusixMatch
+https://api.vagalume.com.br/docs/search
 
-## About
+## Créditos
 "Letras de Músicas por Vagalume
