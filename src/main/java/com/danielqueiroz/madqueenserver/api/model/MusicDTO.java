@@ -8,7 +8,7 @@ public class MusicDTO {
 	private String id;
 	private String title;
 	private String band;
-	private List<String> Letters;
+	private List<LetterDTO> Letters;
 
 	public MusicDTO() {
 		super();
@@ -45,11 +45,15 @@ public class MusicDTO {
 		this.band = band;
 	}
 
-	public List<String> getLetters() {
+	public List<LetterDTO> getLetters() {
 		if (Letters == null) {
 			Letters = new ArrayList<>();
 		}
 		return Letters;
+	}
+
+	public void setLetters(List<LetterDTO> letters) {
+		Letters = letters;
 	}
 
 }

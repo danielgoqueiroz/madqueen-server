@@ -29,13 +29,33 @@ public class VagalumeAPITest {
 	
 	@Test
 	public void shoulGetMudicByID() throws JSONException {
-		MusicDTO musicDTO = api.getMusic("3ade68b7g3be34ea3");
+		
+		MusicDTO musicDTO = api.getMusic("3ade68b5gd4a8eda3");
 		assertNotNull(musicDTO);
 		assertNotNull(musicDTO.getId());
 		assertNotNull(musicDTO.getTitle());
 		assertNotNull(musicDTO.getBand());
 		
-		assertTrue(musicDTO.getLetters().size() == 1);
+		assertTrue(musicDTO.getLetters().size() == 2);
+		
+	}
+	
+	@Test
+	public void shouldFindMusicAndGetLetter() throws JSONException {
+		
+		List<MusicDTO> musics = api.getMusics("heaven and hell");
+		assertNotNull(musics);
+		assertTrue(musics.size() > 0);
+		
+		MusicDTO musicDTO2 = musics.get(0);
+		
+		MusicDTO musicDTO = api.getMusic(musicDTO2.getId());
+		assertNotNull(musicDTO);
+		assertNotNull(musicDTO.getId());
+		assertNotNull(musicDTO.getTitle());
+		assertNotNull(musicDTO.getBand());
+		
+		assertTrue(musicDTO.getLetters().size() == 2);
 		
 	}
 	

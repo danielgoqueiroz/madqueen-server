@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
+import com.danielqueiroz.madqueenserver.api.model.LetterDTO;
 import com.danielqueiroz.madqueenserver.api.model.MusicDTO;
 
 @Component
@@ -53,23 +54,42 @@ public class VagalumeAPI {
 	
 
 	public MusicDTO getMusic(String string) throws JSONException {
-		ResponseEntity<String> response= client.getForEntity("/search.php?musid=" + string + "&limit=10&apikey" + token, String.class);
+		ResponseEntity<String> response= client.getForEntity("/search.php?musid=" + string + "&limit=10&apikey=" + token, String.class);
 		JSONObject jsonBodyObj = new JSONObject(response.getBody());
 		JSONArray musicsJsonArray = jsonBodyObj.getJSONArray("mus");
 		
-		String id = jsonBodyObj.getJSONObject("art").getString("id");
-		String band = jsonBodyObj.getJSONObject("art").getString("name");
+		JSONObject artObj = jsonBodyObj.getJSONObject("art");
+		String id = artObj.getString("id");
+		String band = artObj.getString("name");
 		
 		MusicDTO musicDTO = new MusicDTO();
 		musicDTO.setId(id);
 		musicDTO.setBand(band);
 		
 		for (int i = 0; i < musicsJsonArray.length(); i++) {
-			String name = musicsJsonArray.getJSONObject(i).getString("name");
+			
+			JSONObject musicObj = musicsJsonArray.getJSONObject(i);
+
+			String name = musicObj.getString("name");
+			String music = musicObj.getString("text");
+			Integer lang = musicObj.getInt("lang");
+			
 			musicDTO.setTitle(name);
-			String music = musicsJsonArray.getJSONObject(i).getString("text");
+			
 			if (music != null) {
-				musicDTO.getLetters().add(music);
+				musicDTO.getLetters().add(new LetterDTO(music, lang));
+			}
+			
+			JSONArray translationsJson= musicObj.getJSONArray("translate");
+			if (translationsJson!= null) {
+				for (int j = 0; j < translationsJson.length(); j++) {
+					JSONObject translation = translationsJson.getJSONObject(j);
+					
+					int translLang = translation.getInt("lang");
+					String translationText = translation.getString("text");
+					
+					musicDTO.getLetters().add(new LetterDTO(translationText, translLang));
+				}
 			}
 		}
 		
