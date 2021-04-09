@@ -26,9 +26,9 @@ public class ArtistService {
 	public boolean save(Artist artist) {
 		validate(artist);
 		
-		Artist findByName = repository.findByName(artist.getName());
+		List<Artist> findByName = repository.findByName(artist.getName());
 		
-		if (findByName != null) {
+		if (findByName != null && findByName.isEmpty()) {
 			Artist save = repository.save(artist);
 			if (save != null) {
 				return true;

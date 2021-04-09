@@ -43,7 +43,7 @@ public class ArtistRepositoryTest {
 		assertNotNull(artistSaved.getMusics().get(0).getId());
 		assertNotNull(artistSaved.getBands().get(0).getId());
 		
-		Artist artistFinded = repository.findByName("Manu");
+		Artist artistFinded = repository.findByName("Manu").stream().findFirst().get();
 		assertNotNull(artistFinded);
 		assertNotNull(artistFinded.getName());
 		assertEquals(artist.getName(), artistFinded.getName());
@@ -62,7 +62,7 @@ public class ArtistRepositoryTest {
 		
 		assertTrue(artistSaved.getCuriosities().isEmpty());
 		
-		Artist artistFinded = repository.findByName("Manu");
+		Artist artistFinded = repository.findByName("Manu").stream().findFirst().get();
 		assertNotNull(artistFinded);
 		assertNotNull(artistFinded.getName());
 		assertEquals(artist.getName(), artistFinded.getName());
@@ -83,7 +83,7 @@ public class ArtistRepositoryTest {
 		
 		assertTrue(!artistSaved.getCuriosities().isEmpty());
 		
-		Artist artistFinded = repository.findByName("Manu");
+		Artist artistFinded = repository.findByName("Manu").stream().findFirst().get();
 		assertNotNull(artistFinded.getId());
 		assertNotNull(artistFinded);
 		assertNotNull(artistFinded.getName());
