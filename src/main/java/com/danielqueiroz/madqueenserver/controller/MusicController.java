@@ -32,23 +32,23 @@ public class MusicController {
 	
 	@Autowired
 	private MusicService service;
-//	
-//	@CrossOrigin
-//	@GetMapping(path = "/search",produces = MediaType.APPLICATION_JSON)
-//	public ResponseEntity<?> searchMusic(@RequestParam(required = false, name="title") String title) {
-//		List<MusicDTO> musics = new ArrayList<MusicDTO>();
-//		
-//		try {
-//			musics = service.searchMusics(title);
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-//		} catch (ValidationException e) {
-//			e.printStackTrace();
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-//		}
-//		return ResponseEntity.ok(musics);
-//	}
+
+	@CrossOrigin
+	@GetMapping(path = "/search",produces = MediaType.APPLICATION_JSON)
+	public ResponseEntity<?> searchMusic(@RequestParam(required = false, name="title") String title) {
+		List<MusicDTO> musics = new ArrayList<MusicDTO>();
+		
+		try {
+			musics = service.searchMusics(title);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro de JSON: " + e.getMessage());
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro de validação: " + e.getMessage());
+		}
+		return ResponseEntity.ok(musics);
+	}
 	
 	@CrossOrigin
 	@GetMapping(produces = MediaType.APPLICATION_JSON)
