@@ -4,14 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.danielqueiroz.madqueenserver.Exceptions.ValidationException;
-import com.danielqueiroz.madqueenserver.api.VagalumeAPI;
-import com.danielqueiroz.madqueenserver.api.model.MusicDTO;
 import com.danielqueiroz.madqueenserver.model.Music;
 import com.danielqueiroz.madqueenserver.repository.MusicRepository;
 import com.google.common.base.Strings;
@@ -22,9 +19,9 @@ public class MusicService {
 	@Autowired
 	private MusicRepository repository;
 	
-	@Autowired
-	private VagalumeAPI api;
-	
+//	@Autowired
+//	private VagalumeAPI api;
+//	
 	 public List<Music> getMusics(String title) {
 
 		 if (!Strings.isNullOrEmpty(title)) {
@@ -63,12 +60,12 @@ public class MusicService {
 		
 	}
 
-	public List<MusicDTO> searchMusics(String title) throws JSONException, ValidationException {
-		if (Strings.isNullOrEmpty(title) ) {
-			throw new ValidationException("Deve ser passado uma títiulo para a pesquisa.");
-		}
-		List<MusicDTO> musics = api.getMusics(title);
-		return musics;
-	}
+//	public List<MusicDTO> searchMusics(String title) throws JSONException, ValidationException {
+//		if (Strings.isNullOrEmpty(title) ) {
+//			throw new ValidationException("Deve ser passado uma títiulo para a pesquisa.");
+//		}
+//		List<MusicDTO> musics = api.getMusics(title);
+//		return musics;
+//	}
 	
 }
