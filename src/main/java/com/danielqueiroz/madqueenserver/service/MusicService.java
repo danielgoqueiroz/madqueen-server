@@ -3,8 +3,8 @@ package com.danielqueiroz.madqueenserver.service;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
