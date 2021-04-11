@@ -27,6 +27,7 @@ public class VagalumeAPI {
 	public List<MusicDTO> getMusics(String titleFolter) throws JSONException {
 		RestTemplate restClient = getClient();
 		ResponseEntity<String> response= restClient.getForEntity("/search.excerpt?q="+ titleFolter.replace(" ", "%20")+"&limit=10&apikey" + token, String.class);
+		
 		JSONObject jsonBodyObj = new JSONObject(response.getBody());
 		JSONArray docs = jsonBodyObj.getJSONObject("response").getJSONArray("docs");
 		
