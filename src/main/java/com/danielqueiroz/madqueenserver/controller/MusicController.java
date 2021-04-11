@@ -37,11 +37,15 @@ public class MusicController {
 	@GetMapping(path = "/search",produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<?> searchMusic(@RequestParam(required = false, name="title") String title) {
 		List<MusicDTO> musics = new ArrayList<MusicDTO>();
+		
 		try {
 			musics = service.searchMusics(title);
 		} catch (JSONException e) {
-			ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
 		return ResponseEntity.ok(musics);
 	}

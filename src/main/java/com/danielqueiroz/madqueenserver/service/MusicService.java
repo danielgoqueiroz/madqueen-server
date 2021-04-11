@@ -63,7 +63,10 @@ public class MusicService {
 		
 	}
 
-	public List<MusicDTO> searchMusics(String title) throws JSONException {
+	public List<MusicDTO> searchMusics(String title) throws JSONException, ValidationException {
+		if (Strings.isNullOrEmpty(title) ) {
+			throw new ValidationException("Deve ser passado uma títiulo para a pesquisa.");
+		}
 		List<MusicDTO> musics = api.getMusics(title);
 		return musics;
 	}

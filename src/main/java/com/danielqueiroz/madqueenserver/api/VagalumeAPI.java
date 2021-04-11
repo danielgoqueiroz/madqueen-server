@@ -5,12 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.mapping.Array;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
@@ -25,13 +28,9 @@ public class VagalumeAPI {
 	
 	private RestTemplate client;
 
-	public VagalumeAPI() {
-		getClient();
-	}
-
 	public List<MusicDTO> getMusics(String titleFolter) throws JSONException {
-		
-		ResponseEntity<String> response= client.getForEntity("/search.excerpt?q="+ titleFolter.replace(" ", "%20")+"&limit=10&apikey" + token, String.class);
+		RestTemplate restClient = getClient();
+		ResponseEntity<String> response= restClient.getForEntity("/search.excerpt?q="+ titleFolter.replace(" ", "%20")+"&limit=10&apikey" + token, String.class);
 		JSONObject jsonBodyObj = new JSONObject(response.getBody());
 		JSONArray docs = jsonBodyObj.getJSONObject("response").getJSONArray("docs");
 		
@@ -54,7 +53,8 @@ public class VagalumeAPI {
 	
 
 	public MusicDTO getMusic(String string) throws JSONException {
-		ResponseEntity<String> response= client.getForEntity("/search.php?musid=" + string + "&limit=10&apikey=" + token, String.class);
+		RestTemplate restClient = getClient();
+		ResponseEntity<String> response= restClient.getForEntity("/search.php?musid=" + string + "&limit=10&apikey=" + token, String.class);
 		JSONObject jsonBodyObj = new JSONObject(response.getBody());
 		JSONArray musicsJsonArray = jsonBodyObj.getJSONArray("mus");
 		
@@ -97,6 +97,7 @@ public class VagalumeAPI {
 		
 	}
 	
+	@Bean
 	public RestTemplate getClient() {
 		if (client == null) {
 			this.client = new RestTemplate();
