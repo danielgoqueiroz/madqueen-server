@@ -3,28 +3,24 @@ package com.danielqueiroz.madqueenserver.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danielqueiroz.madqueenserver.Exceptions.ValidationException;
 import com.danielqueiroz.madqueenserver.api.model.MusicDTO;
 import com.danielqueiroz.madqueenserver.model.Music;
 import com.danielqueiroz.madqueenserver.service.MusicService;
-import com.google.common.base.Strings;
 
 @RestController
 @RequestMapping("/music")
@@ -35,7 +31,7 @@ public class MusicController {
 
 	@CrossOrigin
 	@GetMapping(path = "/search",produces = MediaType.APPLICATION_JSON)
-	public ResponseEntity<?> searchMusic(@RequestParam(required = false, name="title") String title) {
+	public ResponseEntity<?> searchMusic(@RequestParam(required = false, name="title") String title) throws JSONException {
 		List<MusicDTO> musics = new ArrayList<MusicDTO>();
 		
 		try {
