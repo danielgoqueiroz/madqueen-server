@@ -9,12 +9,14 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import com.danielqueiroz.madqueenserver.api.model.LetterDTO;
 import com.danielqueiroz.madqueenserver.api.model.MusicDTO;
 
+@Component
 public class VagalumeAPI {
 
 	@Value("${vagalume.token}")
