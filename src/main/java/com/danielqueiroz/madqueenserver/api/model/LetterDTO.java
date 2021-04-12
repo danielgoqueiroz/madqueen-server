@@ -15,7 +15,7 @@ public class LetterDTO {
 			this.lang = "BR";
 			break;
 		case 2:
-			this.lang = "EUA";
+			this.lang = "EN";
 			break;
 		default:
 			break;

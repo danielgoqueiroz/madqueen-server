@@ -63,16 +63,19 @@ public class MusicService {
 		
 	}
 
-	public List<MusicDTO> searchMusics(String title, String id) throws ValidationException, JSONException {
-		if (Strings.isNullOrEmpty(id)) {
-			return Arrays.asList(api.getMusic(id));
-		}
-		
+	public List<MusicDTO> searchMusics(String title) throws ValidationException, JSONException {
 		if (Strings.isNullOrEmpty(title) ) {
 			throw new ValidationException("Deve ser passado uma títiulo para a pesquisa.");
 		}
 		List<MusicDTO> musics = api.getMusics(title);
 		return musics;
+	}
+
+	public MusicDTO searchMusic(String id) throws JSONException, ValidationException {
+		if (Strings.isNullOrEmpty(id)) {
+			throw new ValidationException("Valor de id obrigatório.");
+		}
+		return api.getMusic(id);
 	}
 	
 }
