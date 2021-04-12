@@ -29,13 +29,14 @@ public class MusicController {
 	@Autowired
 	private MusicService service;
 
+	
 	@CrossOrigin
 	@GetMapping(path = "/search",produces = MediaType.APPLICATION_JSON)
-	public ResponseEntity<?> searchMusic(@RequestParam(required = false, name="title") String title) throws JSONException {
+	public ResponseEntity<?> searchMusic(@RequestParam(required = false, name="title") String title, @RequestParam(required = false, name="id") String id) throws JSONException {
 		List<MusicDTO> musics = new ArrayList<MusicDTO>();
 		
 		try {
-			musics = service.searchMusics(title);
+			musics = service.searchMusics(id, title);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro de JSON: " + e.getMessage());

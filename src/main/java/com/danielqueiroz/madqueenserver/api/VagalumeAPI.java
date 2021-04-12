@@ -48,18 +48,18 @@ public class VagalumeAPI {
 
 	
 
-	public MusicDTO getMusic(String string) throws JSONException {
+	public MusicDTO getMusic(String id) throws JSONException {
 		RestTemplate restClient = getClient();
-		ResponseEntity<String> response= restClient.getForEntity("/search.php?musid=" + string + "&limit=10&apikey=" + token, String.class);
+		ResponseEntity<String> response= restClient.getForEntity("/search.php?musid=" + id + "&limit=10&apikey=" + token, String.class);
 		JSONObject jsonBodyObj = new JSONObject(response.getBody());
 		JSONArray musicsJsonArray = jsonBodyObj.getJSONArray("mus");
 		
 		JSONObject artObj = jsonBodyObj.getJSONObject("art");
-		String id = artObj.getString("id");
+		String idValue = artObj.getString("id");
 		String band = artObj.getString("name");
 		
 		MusicDTO musicDTO = new MusicDTO();
-		musicDTO.setId(id);
+		musicDTO.setId(idValue);
 		musicDTO.setBand(band);
 		
 		for (int i = 0; i < musicsJsonArray.length(); i++) {
