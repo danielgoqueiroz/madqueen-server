@@ -76,17 +76,20 @@ public class VagalumeAPI {
 				musicDTO.getLetters().add(new LetterDTO(music, lang));
 			}
 			
-			JSONArray translationsJson= musicObj.getJSONArray("translate");
-			if (translationsJson!= null) {
-				for (int j = 0; j < translationsJson.length(); j++) {
-					JSONObject translation = translationsJson.getJSONObject(j);
-					
-					int translLang = translation.getInt("lang");
-					String translationText = translation.getString("text");
-					
-					musicDTO.getLetters().add(new LetterDTO(translationText, translLang));
+			
+			if (musicObj.has("translate")) {
+				JSONArray translationsJson= musicObj.getJSONArray("translate");
+				if (translationsJson != null) {
+					for (int j = 0; j < translationsJson.length(); j++) {
+						JSONObject translation = translationsJson.getJSONObject(j);
+						
+						int translLang = translation.getInt("lang");
+						String translationText = translation.getString("text");
+						
+						musicDTO.getLetters().add(new LetterDTO(translationText, translLang));
+					}
 				}
-			}
+			};
 		}
 		
 		return musicDTO;
