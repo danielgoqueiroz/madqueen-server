@@ -59,8 +59,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 				.addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
 				.addFilterAfter(new JwtTokenVerifier(jwtConfig, secretKey),
 						JwtUsernamePasswordAuthenticationFilter.class)
-				.authorizeRequests().antMatchers("/status*", "/email*", "/login*").permitAll()
-				.antMatchers("/user*", "/music*", "/artist*", "/band*").hasAnyRole("USER").antMatchers("/admin*")
+				.authorizeRequests().antMatchers("/status*", "/email*", "/login*", "/docs*", "/swagger-ui*").permitAll()
+				.antMatchers("/user*", "/music*", "/artist*", "/band*" ).hasAnyRole("USER").antMatchers("/admin*")
 				.hasAnyRole("ADMIN").anyRequest().authenticated();
 	}
 
