@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.danielqueiroz.madqueenserver.Exceptions.ValidationException;
 import com.danielqueiroz.madqueenserver.api.VagalumeAPI;
 import com.danielqueiroz.madqueenserver.api.model.MusicDTO;
+import com.danielqueiroz.madqueenserver.model.Artist;
 import com.danielqueiroz.madqueenserver.model.Music;
 import com.danielqueiroz.madqueenserver.repository.MusicRepository;
 import com.google.common.base.Strings;
@@ -57,9 +58,10 @@ public class MusicService {
 		if (music.getBand() == null) {
 			throw new ValidationException("A música precisa ter um uma banda vinculada.");
 		}
-//		if (music.getArtist() == null) {
+		if (music.getArtist() == null) {
+			music.setArtist(new Artist(music.getBand().getName(), ""));
 //			throw new ValidationException("A música precisa ter um artísta vinculado.");
-//		}
+		}
 		
 	}
 

@@ -37,6 +37,7 @@ public class Band {
 	private List<Artist> artists;
 
 	public Band() {
+		this.description = "";
 	}
 
 	public Band(Long id, String name, String description, int created, List<Music> musics, List<Artist> artists) {
