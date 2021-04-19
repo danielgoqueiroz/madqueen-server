@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.danielqueiroz.madqueenserver.Exceptions.ValidationException;
 import com.danielqueiroz.madqueenserver.constants.UserCons;
 import com.danielqueiroz.madqueenserver.model.Role;
 import com.danielqueiroz.madqueenserver.model.User;
@@ -30,8 +31,9 @@ public class UserService {
 		return userRespository.findById(id).get();
 	}
 
-	public User findByUsername(String username) {
-		return userRespository.findByUsername(username);
+	public User findByUsername(String username) throws ValidationException {
+		User findByUsername = userRespository.findByUsername(username);
+		return findByUsername;
 	}
 
 	public User findByUsernameAndPassword(String username, String password) {
@@ -43,7 +45,13 @@ public class UserService {
 		return userRespository.findAll();
 	}
 
-	public User save(User user) {
+	public User save(User user) throws ValidationException {
+		
+		User findByUsername = userRespository.findByUsername(user.getUsername());
+		
+		if (findByUsername != null) {
+			throw new ValidationException("Usuário já cadastrado");
+		}
 		
 		if (Validation.validate(user.getUsername(), UserCons.NAME_SIZE_MIN, UserCons.NAME_SIZE_MAX)
 				&& Validation.validate(user.getEmail(), UserCons.EMAIL_SIZE_MIN, UserCons.EMAIL_SIZE_MAX)
@@ -61,7 +69,7 @@ public class UserService {
 	
 	public boolean isUserAndPasswordValid(User user) {
 		User userFinded = userRespository.findByUsername(user.getUsername());
-		if (userFinded != null) {
+		if (userFinded != null ) {
 			return true;
 		}
 		return false;

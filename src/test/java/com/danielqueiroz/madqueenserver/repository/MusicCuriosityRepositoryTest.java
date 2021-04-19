@@ -6,15 +6,17 @@ import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.danielqueiroz.madqueenserver.model.Artist;
 import com.danielqueiroz.madqueenserver.model.Band;
 import com.danielqueiroz.madqueenserver.model.Music;
 
+@SpringBootTest
 public class MusicCuriosityRepositoryTest {
 	
 	@Autowired
-	MusicRepository repository;
+	private MusicRepository repository;
 	
 	@Test
 	@Transactional
@@ -42,10 +44,4 @@ public class MusicCuriosityRepositoryTest {
 		
 	} 
 	
-//	CREATE TABLE `music_curiosity` (
-//			id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-//			description varchar(1000) NOT NULL,
-//			music_id BIGINT NOT NULL,
-//			FOREIGN KEY (music_id) REFERENCES music(id)
-//		)
 }

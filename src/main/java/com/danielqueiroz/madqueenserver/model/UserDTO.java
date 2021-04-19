@@ -11,15 +11,19 @@ public class UserDTO {
 		super();
 	}
 
-	
-	
 	public UserDTO(String username, String password) {
 		super();
 		this.username = username;
 		this.password = password;
 	}
-
-
+	
+	public UserDTO(String username, String password, String email, String cpf) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.cpf = cpf;
+	}
 
 	public String getUsername() {
 		return username;

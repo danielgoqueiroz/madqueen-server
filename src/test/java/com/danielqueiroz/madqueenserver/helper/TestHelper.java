@@ -1,11 +1,33 @@
 package com.danielqueiroz.madqueenserver.helper;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.stereotype.Component;
+
 import com.danielqueiroz.madqueenserver.model.Artist;
 import com.danielqueiroz.madqueenserver.model.Band;
 import com.danielqueiroz.madqueenserver.model.Music;
+import com.danielqueiroz.madqueenserver.model.Role;
+import com.danielqueiroz.madqueenserver.model.User;
+import com.danielqueiroz.madqueenserver.repository.UserRespository;
 
 public class TestHelper {
-
+	
+	@Autowired
+	UserRespository userRepository;
+	
+	public User saveUserTest() {
+		return userRepository.save(getUser());
+	}
+	
+	public static User getUser() {
+		return new User("Usuário Teste", "SenhaTeste123");
+	}
+	
+	public static Role getUserRole() {
+		return new Role().user();
+	}
+	
 	public static Artist getArtist() {
 		return new Artist("Artista Teste", "Descrição artísta teste.");
 	}

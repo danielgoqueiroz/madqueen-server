@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.danielqueiroz.madqueenserver.model.Role;
 import com.danielqueiroz.madqueenserver.model.User;
 
 @SpringBootTest
@@ -25,9 +24,7 @@ public class UserRepositoryTest {
 	@Transactional
 	public void shouldSaveUser() {
 		
-		Role findByDescription = roleRepository.findByDescription("ROLE_USER");
-		
-		User user = new User("manu", "manu123", "manu@email.com", "0654321654", findByDescription);
+		User user = new User("manu", "manu123", "manu@email.com", "0654321654");
 		
 		userRepository.save(user);
 		User saved = userRepository.findByUsername(user.getUsername());

@@ -54,11 +54,13 @@ public class User implements Serializable {
 	public User() {
 	}
 	
-	public User(User user) {
+	public User(UserDTO user) {
 		super();
 		this.username  =user.getUsername();
 		this.password = user.getPassword();
-		this.roles = user.getRoles();
+		this.cpf  =user.getCpf();
+		this.email = user.getEmail();
+		addRole(new Role(RoleCons.USER));
 	}
 
 	public User(String name, String password, String email, String cpf, List<Role> roles) {

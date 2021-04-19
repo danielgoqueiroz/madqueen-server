@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.danielqueiroz.madqueenserver.constants.RoleCons;
+import com.danielqueiroz.madqueenserver.helper.TestHelper;
 import com.danielqueiroz.madqueenserver.model.Role;
 
 @SpringBootTest
@@ -20,9 +21,13 @@ public class RoleRepositoryTest {
 	@Test
 	@Transactional
 	public void findRole() {
-		Role findByDescription = repository.findByDescription(RoleCons.USER);
 		
-		assertNotNull(findByDescription.getId());
+		Role userRole = repository.save(TestHelper.getUserRole());
+		assertNotNull(userRole.getId());
+		
+		Role findByDescription = repository.findByDescription(userRole.getDescription());
+		assertNotNull(findByDescription);
+		
 	}
 	
 }

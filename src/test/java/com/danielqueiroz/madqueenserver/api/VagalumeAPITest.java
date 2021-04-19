@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.danielqueiroz.madqueenserver.api.model.MusicDTO;
 
-@SpringBootTest
+@SpringBootTest(classes = VagalumeAPI.class)
 public class VagalumeAPITest {
 
 	@Autowired

@@ -14,6 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,14 +34,14 @@ public class MusicControllerTest extends BaseControllerTest{
 	@Test
 	public void getMusicList() throws URISyntaxException {
 		
-		String token = getToken("usuarioteste", "senhateste");
+//		String token = getToken("usuarioteste", "senhateste");
 		
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", token);
+//		headers.add("Authorization", token);
 		
 		RequestEntity<Music> requestEntity = new RequestEntity<Music>(headers, HttpMethod.GET, new URI("http://localhost:" + getPort() + "/api/music"));
 			
-		ResponseEntity<Music[]> exchange = (ResponseEntity<Music[]>) getRestTemplate().exchange(requestEntity, Music[].class);
+		ResponseEntity<JSONArray> exchange = (ResponseEntity<JSONArray>) getRestTemplate().exchange(requestEntity, JSONArray.class);
 		exchange.getBody();
 
 		assertEquals(HttpStatus.OK, exchange.getStatusCode());

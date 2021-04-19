@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/status")
 public class StatusController {
 
-	@CrossOrigin
 	@GetMapping(produces = MediaType.APPLICATION_JSON)
 	public ResponseEntity<?> initiateStatus() {
 		return ResponseEntity.ok("On");
