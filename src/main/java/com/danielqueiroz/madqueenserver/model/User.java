@@ -60,7 +60,7 @@ public class User implements Serializable {
 		this.password = user.getPassword();
 		this.cpf  =user.getCpf();
 		this.email = user.getEmail();
-		addRole(new Role(RoleCons.USER));
+		addRole(new Role().user());
 	}
 
 	public User(String name, String password, String email, String cpf, List<Role> roles) {
@@ -84,7 +84,7 @@ public class User implements Serializable {
 		this.username = name;
 		this.password = password;
 		this.cpf = cpf;
-		addRole(new Role(RoleCons.USER));
+		addRole(new Role().user());
 	}
 	
 	public User(String name, String password, Role role) {
@@ -96,7 +96,7 @@ public class User implements Serializable {
 	public User(String name, String password) {
 		this.username = name;
 		this.password = password;
-		addRole(new Role(RoleCons.USER));
+		addRole(new Role().user());
 	}
 
 	private void addRole(Role role) {
@@ -144,19 +144,21 @@ public class User implements Serializable {
 	}
 
 	public List<Role> getRoles() {
+		if (this.roles == null) {
+			this.roles = new ArrayList<Role>();
+		}
 		return roles;
 	}
 	
 	public List<SimpleGrantedAuthority> getAuthorities() {
-		List<SimpleGrantedAuthority> authorities = getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getDescription())).collect(Collectors.toList());
+		List<Role> roles = this.getRoles();
+		List<SimpleGrantedAuthority> authorities = roles.stream().map(role -> new SimpleGrantedAuthority(role.getDescription())).collect(Collectors.toList());
 		return authorities;
 	}
 
 	public void setAddRoleTypeUser() {
-		if (this.roles == null || this.roles.isEmpty()) {
-			this.roles = new ArrayList<Role>();
-		}
-		this.roles.add(new Role("USER"));
+		getRoles();
+		this.roles.add(new Role().user());
 		this.roles = getRoles();
 	}
 
@@ -165,10 +167,8 @@ public class User implements Serializable {
 	}
 
 	public void addDefaultRole() {
-		if (this.getRoles() == null || this.getRoles().isEmpty()) {
-			this.roles = new ArrayList<Role>();
-		}
-		Role rl = new Role("USER");
+		getRoles();
+		Role rl = new Role().user();
 		this.getRoles().add(rl);
 	}
 

@@ -28,7 +28,7 @@ public class UserController {
 	
 	@CrossOrigin
 	@PostMapping(consumes = MediaType.APPLICATION_JSON)
-	public ResponseEntity<?>getUser(@RequestBody UserDTO userDTO) {
+	public ResponseEntity<?>createUser(@RequestBody UserDTO userDTO) {
 
 		User user = new User(userDTO);
 		User userCreated;

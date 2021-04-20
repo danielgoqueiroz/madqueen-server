@@ -42,7 +42,7 @@ public class Role implements Serializable {
 		return new Role(RoleCons.ADMIN);
 	}
 
-	public Role(String name) {
+	private Role(String name) {
 		this.description = name;
 	}
 

@@ -4,19 +4,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
 
-import com.danielqueiroz.madqueenserver.helper.TestHelper;
 import com.danielqueiroz.madqueenserver.jwt.UsernameAndPasswordAuthenticationRequest;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 public class BaseControllerTest {
 	
 	@LocalServerPort
@@ -24,7 +24,10 @@ public class BaseControllerTest {
 	
 	@Autowired
 	private TestRestTemplate restTemplate;
-
+	
+	@Autowired
+	MockMvc mockMvc;
+	
 	public int getPort() {
 		return port;
 	}

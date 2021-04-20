@@ -59,7 +59,15 @@ public class UserService {
 			if (user.getRoles().isEmpty()) {
 				user.addDefaultRole();
 			}
-			List<Role> dbRoles = user.getRoles().stream().map(role -> roleRespository.findByDescription(role.getDescription())).collect(Collectors.toList());
+			
+			
+			List<Role> roles = user.getRoles();
+			List<Role> dbRoles = roles.stream().map(role -> roleRespository.findByDescription(role.getDescription())).collect(Collectors.toList());
+			
+			if (dbRoles == null) {
+				roleRespository.save(new Role().user());
+			}
+			
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setRoles(dbRoles);
 			return userRespository.save(user);

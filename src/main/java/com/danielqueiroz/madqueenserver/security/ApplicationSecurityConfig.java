@@ -1,12 +1,11 @@
 package com.danielqueiroz.madqueenserver.security;
 
-import java.util.Arrays;
-
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -16,10 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.danielqueiroz.madqueenserver.auth.ApplicationUserService;
 import com.danielqueiroz.madqueenserver.jwt.JwtConfig;
@@ -50,19 +45,19 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 		CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
+		cors.addAllowedMethod("*");
 		cors.addExposedHeader("Authorization");
-		http.csrf().disable()
-				.cors().configurationSource(request -> {
-					return cors;
-				})
+		http.csrf().disable().cors().configurationSource(request -> { return cors; })
 			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 				.addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
-				.addFilterAfter(new JwtTokenVerifier(jwtConfig, secretKey),
-						JwtUsernamePasswordAuthenticationFilter.class)
-				.authorizeRequests().antMatchers("/status*", "/email*", "/login*", "/docs*", "/swagger-ui*").permitAll()
-				.antMatchers("/user*", "/music*", "/artist*", "/band*" ).hasAnyRole("USER").antMatchers("/admin*")
-				.hasAnyRole("ADMIN").anyRequest().authenticated();
+				.addFilterAfter(new JwtTokenVerifier(jwtConfig, secretKey), JwtUsernamePasswordAuthenticationFilter.class)
+				.authorizeRequests()
+				.antMatchers("/status*", "/email*", "/login*", "/docs*", "/swagger-ui*").permitAll()
+				.antMatchers(HttpMethod.POST, "/user*").permitAll()
+				.antMatchers(HttpMethod.GET, "/user*").permitAll()
+				.antMatchers("/music*", "/artist*", "/band*" ).hasAnyRole("USER")
+				.antMatchers("/admin*").hasAnyRole("ADMIN").anyRequest().authenticated();
 	}
 
 	@Override
