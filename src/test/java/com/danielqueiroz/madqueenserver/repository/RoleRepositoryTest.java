@@ -22,10 +22,7 @@ public class RoleRepositoryTest {
 	@Transactional
 	public void findRole() {
 		
-		Role userRole = repository.save(TestHelper.getUserRole());
-		assertNotNull(userRole.getId());
-		
-		Role findByDescription = repository.findByDescription(userRole.getDescription());
+		Role findByDescription = repository.findByDescription(new Role().user().getDescription());
 		assertNotNull(findByDescription);
 		
 	}

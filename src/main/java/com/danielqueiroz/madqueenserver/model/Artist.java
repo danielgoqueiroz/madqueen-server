@@ -47,7 +47,6 @@ public class Artist {
 		this.description = description;
 	}
 
-
 	public Artist(Long id, String name, String description, List<Music> musics, List<ArtistCuriosity> curiosities,
 			List<Band> bands) {
 		super();
