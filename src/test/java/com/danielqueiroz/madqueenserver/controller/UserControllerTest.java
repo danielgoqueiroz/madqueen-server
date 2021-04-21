@@ -12,7 +12,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import com.danielqueiroz.madqueenserver.model.LoginDTO;
