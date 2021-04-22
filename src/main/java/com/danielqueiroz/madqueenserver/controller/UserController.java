@@ -34,7 +34,7 @@ public class UserController {
 		User userCreated;
 		try {
 			userCreated = userService.save(user);
-			return ResponseEntity.ok(userCreated);
+			return ResponseEntity.status(HttpStatus.CREATED).body(userCreated);
 		} catch (ValidationException e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body(e.getMessage());

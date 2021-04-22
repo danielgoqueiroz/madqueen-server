@@ -25,6 +25,9 @@ public class ApplicationUserDaoImpl implements ApplicationUserDao {
 	@Override
 	public Optional<ApplicationUser> selectApplicationUserByUsername(String username) {
 		User user = repository.findByUsername(username);
+		if (user == null) {
+			return Optional.empty();
+		}
 		ApplicationUser applicationUser = new ApplicationUser(user.getAuthorities(), user.getPassword(), user.getUsername(), true, true, true, true);
 		return Optional.of(applicationUser);
 	}

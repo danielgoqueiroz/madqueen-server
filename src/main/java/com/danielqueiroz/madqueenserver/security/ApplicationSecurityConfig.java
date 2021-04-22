@@ -1,5 +1,8 @@
 package com.danielqueiroz.madqueenserver.security;
 
+import static com.danielqueiroz.madqueenserver.constants.RoleCons.USER;
+import static com.danielqueiroz.madqueenserver.constants.SecurityConstants.HEADER_AUTHORIZATION;
+
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +49,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
 		cors.addAllowedMethod("*");
-		cors.addExposedHeader("Authorization");
+		cors.addExposedHeader(HEADER_AUTHORIZATION);
 		http.csrf().disable().cors().configurationSource(request -> { return cors; })
 			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
@@ -54,9 +57,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 				.addFilterAfter(new JwtTokenVerifier(jwtConfig, secretKey), JwtUsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests()
 				.antMatchers("/status*", "/email*", "/login*", "/docs*", "/swagger-ui*").permitAll()
-				.antMatchers(HttpMethod.POST, "/user*").permitAll()
 				.antMatchers(HttpMethod.GET, "/user*").permitAll()
-				.antMatchers("/music*", "/artist*", "/band*" ).hasAnyRole("USER")
+				.antMatchers(HttpMethod.POST, "/user*").permitAll()
+				.antMatchers("/artist*").hasAnyAuthority(USER)
+				.antMatchers("/music*", "/band*" ).hasAnyAuthority(USER)
 				.antMatchers("/admin*").hasAnyRole("ADMIN").anyRequest().authenticated();
 	}
 

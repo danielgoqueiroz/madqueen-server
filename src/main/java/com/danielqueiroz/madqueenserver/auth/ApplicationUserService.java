@@ -23,7 +23,8 @@ public class ApplicationUserService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return  applicationUserDao.selectApplicationUserByUsername(username)
+		ApplicationUser orElseThrow = applicationUserDao.selectApplicationUserByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException(String.format("Usuário %s não encontrado", username)));
+		return  orElseThrow;
 	}
 }

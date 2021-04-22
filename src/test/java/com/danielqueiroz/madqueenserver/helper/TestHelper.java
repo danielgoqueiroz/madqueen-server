@@ -1,20 +1,28 @@
 package com.danielqueiroz.madqueenserver.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.stereotype.Component;
+import org.springframework.test.web.servlet.MockMvc;
 
+import com.danielqueiroz.madqueenserver.controller.BaseControllerTest;
 import com.danielqueiroz.madqueenserver.model.Artist;
 import com.danielqueiroz.madqueenserver.model.Band;
 import com.danielqueiroz.madqueenserver.model.Music;
 import com.danielqueiroz.madqueenserver.model.Role;
 import com.danielqueiroz.madqueenserver.model.User;
+import com.danielqueiroz.madqueenserver.model.UserDTO;
 import com.danielqueiroz.madqueenserver.repository.UserRespository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class TestHelper {
+public class TestHelper extends BaseControllerTest {
 	
 	@Autowired
 	UserRespository userRepository;
+	
+	@Autowired
+	static	MockMvc mockMvc;
+	
+	ObjectMapper mapper;
 	
 	public User saveUserTest() {
 		return userRepository.save(getUser());
@@ -44,5 +52,22 @@ public class TestHelper {
 	public static Band getBand() {
 		return new Band("Nome da Banda", "Descriçao da banda");
 	}
+	
+	public UserDTO getUserDTO() throws JsonProcessingException {
+		return new UserDTO("Usuário Teste", "SenhaTeste123", "teste@email.com", "1236547898");
+	}
+	
+	public UserDTO getUserAdminDTO() throws JsonProcessingException {
+		return new UserDTO("Admin Teste", "adminsenha123", "admin@email.com", "1236547898");
+	}
+	
+	public ObjectMapper getObjectMapper() {
+		if (mapper == null) {
+			mapper = new ObjectMapper();
+		}
+		return mapper;
+	}
+	
+	
 	
 }

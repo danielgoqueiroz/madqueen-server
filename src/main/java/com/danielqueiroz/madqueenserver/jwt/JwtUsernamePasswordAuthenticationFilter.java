@@ -21,59 +21,56 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Jwts;
 
-public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
+public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	private final AuthenticationManager authenticationManager;
 	private final JwtConfig jwtConfig;
 	private final SecretKey secretKey;
-	
+
 	@Autowired
-	public JwtUsernamePasswordAuthenticationFilter(
-			AuthenticationManager authenticationManager, 
-			JwtConfig jwtConfig,
+	public JwtUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager, JwtConfig jwtConfig,
 			SecretKey secretKey) {
-		
+
 		this.authenticationManager = authenticationManager;
 		this.jwtConfig = jwtConfig;
 		this.secretKey = secretKey;
 	}
-	
+
 	@Override
-	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException{
+	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+			throws AuthenticationException {
 		try {
-		UsernameAndPasswordAuthenticationRequest authenticationRequest = new ObjectMapper().readValue(
-				request.getInputStream(), UsernameAndPasswordAuthenticationRequest.class);
-		
-		Authentication authentication = new UsernamePasswordAuthenticationToken(
-				authenticationRequest.getUsername(), 
-				authenticationRequest.getPassword()
-				);
-		
-				Authentication authenticate = this.authenticationManager.authenticate(authentication);
-				
-				return authenticate;
-				
+			UsernameAndPasswordAuthenticationRequest authenticationRequest = new ObjectMapper()
+					.readValue(request.getInputStream(), UsernameAndPasswordAuthenticationRequest.class);
+
+			Authentication authentication = new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
+					authenticationRequest.getPassword());
+
+//			if (!authentication.isAuthenticated()) {
+//				response.setStatus(403);
+//				return null;
+//			}
+			Authentication authenticate = this.authenticationManager.authenticate(authentication);
+
+			return authenticate;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		
+
 	}
-	
+
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
-		
+
 		Date now = new Date();
-		
-		String token = Jwts.builder()
-			.setSubject(authResult.getName())
-			.claim("authorities", authResult.getAuthorities())
-			.setIssuedAt(now)
-			.setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getTokenExpirationAfterDays())))
-			.signWith(secretKey)
-			.compact();
-		
+
+		String token = Jwts.builder().setSubject(authResult.getName()).claim("authorities", authResult.getAuthorities())
+				.setIssuedAt(now)
+				.setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getTokenExpirationAfterDays())))
+				.signWith(secretKey).compact();
+
 		response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix() + token);
-		
+
 	}
 }
